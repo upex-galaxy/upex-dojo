@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
+import { ComponentLayout } from "@/components/component-layout"
 
 export default function RadioButtonsPage() {
   const [selectedValue, setSelectedValue] = useState("")
@@ -12,7 +13,7 @@ export default function RadioButtonsPage() {
   }
 
   return (
-    <div className="container py-10">
+    <ComponentLayout>
       <h1 className="text-3xl font-bold mb-6">Radio Buttons</h1>
       <div className="space-y-4">
         <RadioGroup onValueChange={handleValueChange} value={selectedValue}>
@@ -28,7 +29,7 @@ export default function RadioButtonsPage() {
         <h2 className="text-lg font-semibold mb-2">Selected Option:</h2>
         <p>{selectedValue ? `Option ${selectedValue.slice(-1)}` : "None"}</p>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }
 

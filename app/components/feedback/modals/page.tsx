@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { ComponentLayout } from "@/components/component-layout"
 
 export default function ModalsPage() {
   const [isOpen, setIsOpen] = useState(false)
@@ -31,7 +32,7 @@ export default function ModalsPage() {
   }
 
   return (
-    <div className="container py-10">
+    <ComponentLayout>
       <h1 className="text-3xl font-bold mb-6">Modals</h1>
       <div className="space-y-4">
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
@@ -68,7 +69,7 @@ export default function ModalsPage() {
           {inputValue && <p>Last submitted value: {inputValue}</p>}
         </div>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }
 

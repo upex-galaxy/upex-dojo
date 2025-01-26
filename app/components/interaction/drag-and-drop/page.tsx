@@ -19,6 +19,7 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { Button } from "@/components/ui/button"
+import { ComponentLayout } from "@/components/component-layout"
 
 const SortableItem = ({ id }: { id: string }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id })
@@ -142,51 +143,53 @@ export default function DragAndDropPage() {
   }
 
   return (
-    <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-6">Drag and Drop</h1>
+    <ComponentLayout>
+      <div className="container py-10">
+        <h1 className="text-3xl font-bold mb-6">Drag and Drop</h1>
 
-      <h2 className="text-2xl font-semibold mb-4">Sortable List</h2>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-        onDragStart={handleDragStart}
-      >
-        <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          <div className="space-y-2">
-            {items.map((id) => (
-              <SortableItem key={id} id={id} />
-            ))}
+        <h2 className="text-2xl font-semibold mb-4">Sortable List</h2>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          onDragStart={handleDragStart}
+        >
+          <SortableContext items={items} strategy={verticalListSortingStrategy}>
+            <div className="space-y-2">
+              {items.map((id) => (
+                <SortableItem key={id} id={id} />
+              ))}
+            </div>
+          </SortableContext>
+          <DragOverlay>{activeId ? <DraggableItem id={activeId} /> : null}</DragOverlay>
+        </DndContext>
+
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Drag Between Containers</h2>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEndContainers}
+          onDragStart={handleDragStart}
+        >
+          <div className="grid grid-cols-2 gap-4">
+            <Container id="container1" items={containers.container1} />
+            <Container id="container2" items={containers.container2} />
           </div>
-        </SortableContext>
-        <DragOverlay>{activeId ? <DraggableItem id={activeId} /> : null}</DragOverlay>
-      </DndContext>
+          <DragOverlay>{activeId ? <DraggableItem id={activeId} /> : null}</DragOverlay>
+        </DndContext>
 
-      <h2 className="text-2xl font-semibold mt-8 mb-4">Drag Between Containers</h2>
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEndContainers}
-        onDragStart={handleDragStart}
-      >
-        <div className="grid grid-cols-2 gap-4">
-          <Container id="container1" items={containers.container1} />
-          <Container id="container2" items={containers.container2} />
+        <Button onClick={resetContainers} className="mt-4">
+          Reset Containers
+        </Button>
+
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold">Current State:</h2>
+          <pre className="mt-2 p-4 bg-muted rounded-md overflow-auto">
+            {JSON.stringify({ sortableList: items, containers }, null, 2)}
+          </pre>
         </div>
-        <DragOverlay>{activeId ? <DraggableItem id={activeId} /> : null}</DragOverlay>
-      </DndContext>
-
-      <Button onClick={resetContainers} className="mt-4">
-        Reset Containers
-      </Button>
-
-      <div className="mt-8">
-        <h2 className="text-lg font-semibold">Current State:</h2>
-        <pre className="mt-2 p-4 bg-muted rounded-md overflow-auto">
-          {JSON.stringify({ sortableList: items, containers }, null, 2)}
-        </pre>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }
 

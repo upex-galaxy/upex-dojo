@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { ComponentLayout } from "@/components/component-layout"
 
 interface Invoice {
   invoice: string
@@ -94,7 +95,7 @@ export default function TablesPage() {
   }
 
   return (
-    <div className="container py-10">
+    <ComponentLayout>
       <h1 className="text-3xl font-bold mb-6">Tables</h1>
       <div className="space-y-4">
         <Input placeholder="Search invoices..." value={searchTerm} onChange={handleSearch} className="max-w-sm" />
@@ -151,7 +152,7 @@ export default function TablesPage() {
           <p>Selected Rows: {selectedRows.join(", ") || "None"}</p>
         </div>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }
 

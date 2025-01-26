@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
+import { ComponentLayout } from "@/components/component-layout"
 
 export default function DropdownMenusPage() {
   const [selectedValue, setSelectedValue] = useState("")
@@ -12,7 +13,7 @@ export default function DropdownMenusPage() {
   }
 
   return (
-    <div className="container py-10">
+    <ComponentLayout>
       <h1 className="text-3xl font-bold mb-6">Dropdown Menus</h1>
       <div className="space-y-4">
         <div>
@@ -32,7 +33,7 @@ export default function DropdownMenusPage() {
           <p className="mt-2">Selected fruit: {selectedValue}</p>
         </div>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }
 

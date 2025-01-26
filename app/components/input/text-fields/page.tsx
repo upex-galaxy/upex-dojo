@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { ComponentLayout } from "@/components/component-layout"
 
 export default function TextFieldsPage() {
   const [inputValue, setInputValue] = useState("")
@@ -31,7 +32,7 @@ export default function TextFieldsPage() {
   }
 
   return (
-    <div className="container py-10">
+    <ComponentLayout>
       <h1 className="text-3xl font-bold mb-6">Text Fields</h1>
       <div className="space-y-4">
         <div>
@@ -55,7 +56,7 @@ export default function TextFieldsPage() {
           <p>Email valid: {emailValid ? "Yes" : "No"}</p>
         </div>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }
 

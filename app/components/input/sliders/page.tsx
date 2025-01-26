@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Slider } from "@/components/ui/slider"
 import { Label } from "@/components/ui/label"
+import { ComponentLayout } from "@/components/component-layout"
 
 export default function SlidersPage() {
   const [singleValue, setSingleValue] = useState(50)
@@ -17,7 +18,7 @@ export default function SlidersPage() {
   }
 
   return (
-    <div className="container py-10">
+    <ComponentLayout>
       <h1 className="text-3xl font-bold mb-6">Sliders</h1>
       <div className="space-y-8">
         <div>
@@ -53,7 +54,7 @@ export default function SlidersPage() {
           </p>
         </div>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }
 

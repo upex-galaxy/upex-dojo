@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import { ComponentLayout } from "@/components/component-layout"
 
 export default function CheckboxesPage() {
   const [checked, setChecked] = useState<Record<string, boolean>>({
@@ -16,7 +17,7 @@ export default function CheckboxesPage() {
   }
 
   return (
-    <div className="container py-10">
+    <ComponentLayout>
       <h1 className="text-3xl font-bold mb-6">Checkboxes</h1>
       <div className="space-y-4">
         {Object.entries(checked).map(([id, isChecked]) => (
@@ -41,7 +42,7 @@ export default function CheckboxesPage() {
             ))}
         </ul>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }
 

@@ -3,12 +3,13 @@
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { ComponentLayout } from "@/components/component-layout"
 
 export default function TooltipsPage() {
   const [hoveredTooltip, setHoveredTooltip] = useState<string | null>(null)
 
   return (
-    <div className="container py-10">
+    <ComponentLayout>
       <h1 className="text-3xl font-bold mb-6">Tooltips</h1>
       <div className="space-y-4">
         <TooltipProvider>
@@ -47,7 +48,7 @@ export default function TooltipsPage() {
       <div className="mt-4">
         <p>Currently hovered tooltip: {hoveredTooltip || "None"}</p>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }
 
