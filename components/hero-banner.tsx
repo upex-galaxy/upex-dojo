@@ -18,21 +18,16 @@ export function HeroBanner() {
 
       <div className="relative z-20 container mx-auto px-4 py-20 text-center">
         {/* Main content */}
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto flex flex-col items-center space-y-8">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400">
             Welcome to UPEX DOJO
           </h1>
           <h2 className="text-xl md:text-2xl font-semibold mb-6 text-gray-200">
             Your Ultimate QA Automation Basic Training Ground
           </h2>
-          <p className="text-lg text-gray-300 mb-12">
-            Select any component from our practice list below and test it with the framework of your choice—Playwright,
-            Cypress, Selenium, and more. Strengthen your skills by exploring real-world testing scenarios within this
-            virtual Dojo.
-          </p>
 
           {/* Framework logos */}
-          <div className="flex justify-center items-center gap-8">
+          <div className="flex justify-center items-center gap-8 mb-16">
             <Link href="https://docs.cypress.io/" target="_blank" rel="noopener noreferrer" className="block">
               <div className="relative w-16 h-16 overflow-hidden rounded-lg bg-white/10 backdrop-blur-sm border-2 border-gray-800 p-[2px] transition-transform hover:scale-110">
                 <div className="w-full h-full rounded-lg overflow-hidden bg-white/10 p-2">
@@ -80,22 +75,27 @@ export function HeroBanner() {
               </div>
             </Link>
           </div>
+          {/* Subtle arrow indicator */}
+          <div className="left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg
+              className="w-6 h-6 text-gray-400"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+          </div>
+          <p className="text-lg sm:text-sm text-gray-300 max-w-4xl sm:max-w-[300px] mx-auto leading-relaxed sm:leading-tight px-4">
+            Select any component from our practice list below and test it with the framework of your choice—Playwright,
+            Cypress, Selenium, and more. Strengthen your skills by exploring real-world testing scenarios within this
+            virtual Dojo.
+          </p>
         </div>
-
-        {/* Subtle arrow indicator */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <svg
-            className="w-6 h-6 text-gray-400"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-          </svg>
-        </div>
+        
       </div>
     </div>
   )

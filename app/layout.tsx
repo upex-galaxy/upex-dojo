@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import localFont from 'next/font/local';
 import { MainNav } from "@/components/main-nav"
+import { Footer } from "@/components/footer"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -29,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen ${geistSans.className} ${codeFont.className}`}>
+      <body className={`${inter.className} min-h-screen flex flex-col ${geistSans.className} ${codeFont.className}`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <div className="flex min-h-screen flex-col">
             <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
@@ -38,6 +39,7 @@ export default function RootLayout({
               </div>
             </header>
             {children}
+            <Footer />
           </div>
         </ThemeProvider>
       </body>
