@@ -89,7 +89,7 @@ export function HeroBanner() {
               <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
             </svg>
           </div>
-          <p className="text-lg sm:text-sm text-gray-300 max-w-4xl sm:max-w-[300px] mx-auto leading-relaxed sm:leading-tight px-4">
+          <p className="text-lg text-gray-300 max-w-4xl mx-auto leading-relaxed">
             Select any component from our practice list below and test it with the framework of your choice—Playwright,
             Cypress, Selenium, and more. Strengthen your skills by exploring real-world testing scenarios within this
             virtual Dojo.
