@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -33,30 +35,44 @@ export default function TextFieldsPage() {
 
   return (
     <ComponentLayout>
-      <h1 className="text-3xl font-bold mb-6">Text Fields</h1>
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="basic-input">Basic Input</Label>
-          <Input id="basic-input" value={inputValue} onChange={handleInputChange} placeholder="Type here..." />
-          <p>Current value: {inputValue}</p>
-          <Button onClick={handleClear} className="mr-2">
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">
+        Text Fields
+      </h1>
+      <div className="space-y-4" data-testid="text-fields-container">
+        <div data-testid="input-section">
+          <Label htmlFor="basic-input" data-testid="input-label">
+            Basic Input
+          </Label>
+          <Input
+            id="basic-input"
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="Type here..."
+            data-testid="text-input"
+          />
+          <p data-testid="input-value">Current value: {inputValue}</p>
+          <Button onClick={handleClear} className="mr-2" data-testid="clear-button">
             Clear
           </Button>
-          <Button onClick={handlePaste}>Paste</Button>
+          <Button onClick={handlePaste} data-testid="paste-button">
+            Paste
+          </Button>
         </div>
-        <div>
-          <Label htmlFor="email-input">Email Input</Label>
+        <div data-testid="input-section">
+          <Label htmlFor="email-input" data-testid="input-label">
+            Email Input
+          </Label>
           <Input
             id="email-input"
             type="email"
             value={emailValue}
             onChange={handleEmailChange}
             placeholder="Enter your email"
+            data-testid="email-input"
           />
-          <p>Email valid: {emailValid ? "Yes" : "No"}</p>
+          <p data-testid="email-validation">Email valid: {emailValid ? "Yes" : "No"}</p>
         </div>
       </div>
     </ComponentLayout>
   )
 }
-

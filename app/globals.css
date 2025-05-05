@@ -4,48 +4,79 @@
 
 @layer base {
   :root {
-    --background: 220 13% 91%;
+    --background: 0 0% 100%;
     --foreground: 224 71.4% 4.1%;
+
     --card: 0 0% 100%;
     --card-foreground: 224 71.4% 4.1%;
+
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
+
     --primary: 262.1 83.3% 57.8%;
     --primary-foreground: 210 20% 98%;
+
     --secondary: 220 14.3% 95.9%;
     --secondary-foreground: 220.9 39.3% 11%;
+
     --muted: 220 14.3% 95.9%;
     --muted-foreground: 220 8.9% 46.1%;
+
     --accent: 220 14.3% 95.9%;
     --accent-foreground: 220.9 39.3% 11%;
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
+
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 262.1 83.3% 57.8%;
+
     --radius: 0.5rem;
+
+    /* Chart colors */
+    --chart-1: 262.1 83.3% 57.8%;
+    --chart-2: 221 83.2% 53.3%;
+    --chart-3: 198 93.2% 59.6%;
+    --chart-4: 158.4 64.4% 51.6%;
+    --chart-5: 130.4 55.6% 52.5%;
   }
 
   .dark {
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
+
     --card: 224 71.4% 4.1%;
     --card-foreground: 210 20% 98%;
+
     --popover: 224 71.4% 4.1%;
     --popover-foreground: 210 20% 98%;
+
     --primary: 263.4 70% 50.4%;
     --primary-foreground: 210 20% 98%;
+
     --secondary: 215 27.9% 16.9%;
     --secondary-foreground: 210 20% 98%;
+
     --muted: 215 27.9% 16.9%;
     --muted-foreground: 217.9 10.6% 64.9%;
+
     --accent: 215 27.9% 16.9%;
     --accent-foreground: 210 20% 98%;
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
+
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
     --ring: 263.4 70% 50.4%;
+
+    /* Chart colors for dark mode */
+    --chart-1: 262.1 83.3% 67.8%;
+    --chart-2: 221 83.2% 63.3%;
+    --chart-3: 198 93.2% 69.6%;
+    --chart-4: 158.4 64.4% 61.6%;
+    --chart-5: 130.4 55.6% 62.5%;
   }
 }
 
@@ -59,6 +90,37 @@
 }
 
 .page-background {
-  @apply bg-gradient-to-b from-gray-900 to-gray-800;
+  @apply bg-gradient-to-b from-background to-background/80;
 }
 
+/* Improved contrast for code blocks */
+pre {
+  @apply bg-muted text-muted-foreground p-4 rounded-md;
+}
+
+/* Ensure form elements have proper contrast */
+input,
+select,
+textarea {
+  @apply bg-background border-input text-foreground;
+}
+
+/* Ensure links are visible in both themes */
+a:not([class]) {
+  @apply text-primary hover:text-primary/80 underline-offset-4 hover:underline;
+}
+
+/* Ensure table borders are visible */
+table {
+  @apply border-collapse;
+}
+
+th,
+td {
+  @apply border border-border p-2;
+}
+
+/* Ensure proper contrast for code */
+code {
+  @apply bg-muted text-primary px-1 py-0.5 rounded;
+}

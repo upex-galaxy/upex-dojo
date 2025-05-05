@@ -9,6 +9,7 @@ const components = [
   { name: "Checkboxes", icon: Icons.checkbox, href: "/components/input/checkboxes" },
   { name: "Radio Buttons", icon: Icons.radio, href: "/components/input/radio-buttons" },
   { name: "Sliders", icon: Icons.slider, href: "/components/input/sliders" },
+  { name: "Date Pickers", icon: Icons.calendar, href: "/components/input/date-pickers" },
   { name: "Modals", icon: Icons.modal, href: "/components/feedback/modals" },
   { name: "Tooltips", icon: Icons.tooltip, href: "/components/feedback/tooltips" },
   { name: "Tables", icon: Icons.table, href: "/components/data/tables" },
@@ -25,15 +26,19 @@ const components = [
   { name: "Drag-and-Drop", icon: Icons.dragDrop, href: "/components/interaction/drag-and-drop" },
   { name: "File Uploads", icon: Icons.upload, href: "/components/input/file-uploads" },
   { name: "File Downloads", icon: Icons.download, href: "/components/interaction/file-downloads" },
+  { name: "Shipping Form", icon: Icons.form, href: "/components/forms/shipping-information" },
 ]
 
 export default function Home() {
   return (
     <>
       <HeroBanner />
-      <main className="flex-1 page-background">
+      <main className="flex-1" id="components-section" data-testid="components-section">
         <div className="container max-w-5xl mx-auto px-4 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-3xl font-bold mb-8 text-center" data-testid="components-heading">
+            Practice Components
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-testid="components-grid">
             {components.map((component) => (
               <ComponentCard key={component.name} {...component} />
             ))}
@@ -43,4 +48,3 @@ export default function Home() {
     </>
   )
 }
-

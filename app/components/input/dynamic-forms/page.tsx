@@ -14,7 +14,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { ComponentLayout } from "@/components/component-layout"
 
-
 const profileFormSchema = z.object({
   username: z
     .string()
@@ -76,137 +75,134 @@ export default function DynamicFormsPage() {
 
   return (
     <ComponentLayout>
-      <div className="container py-10">
-        <h1 className="text-3xl font-bold mb-6">Dynamic Forms</h1>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="shadcn" {...field} />
-                  </FormControl>
-                  <FormDescription>This is your public display name.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="m@example.com" {...field} />
-                  </FormControl>
-                  <FormDescription>Enter your email address.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bio</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="Tell us a little bit about yourself" className="resize-none" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    You can <span>@mention</span> other users and organizations.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div>
-              {fields.map((field, index) => (
-                <FormField
-                  control={form.control}
-                  key={field.id}
-                  name={`urls.${index}.value`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className={cn(index !== 0 && "sr-only")}>URLs</FormLabel>
-                      <FormDescription className={cn(index !== 0 && "sr-only")}>
-                        Add links to your website, blog, or social media profiles.
-                      </FormDescription>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              ))}
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="mt-2"
-                onClick={() => append({ value: "" })}
-                disabled={fields.length >= 4}
-              >
-                Add URL
-              </Button>
-            </div>
-            <FormField
-              control={form.control}
-              name="applyJob"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                  <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Apply for a job</FormLabel>
-                    <FormDescription>Check this if you want to apply for a job.</FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            {watchApplyJob && (
+      <h1 className="text-3xl font-bold mb-6">Dynamic Forms</h1>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormDescription>This is your public display name.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="m@example.com" {...field} />
+                </FormControl>
+                <FormDescription>Enter your email address.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bio</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Tell us a little bit about yourself" className="resize-none" {...field} />
+                </FormControl>
+                <FormDescription>
+                  You can <span>@mention</span> other users and organizations.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div>
+            {fields.map((field, index) => (
               <FormField
                 control={form.control}
-                name="employmentStatus"
+                key={field.id}
+                name={`urls.${index}.value`}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Employment Status</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your employment status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="unemployed">Unemployed</SelectItem>
-                        <SelectItem value="employed">Employed</SelectItem>
-                        <SelectItem value="student">Student</SelectItem>
-                        <SelectItem value="retired">Retired</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>Select your current employment status.</FormDescription>
+                    <FormLabel className={cn(index !== 0 && "sr-only")}>URLs</FormLabel>
+                    <FormDescription className={cn(index !== 0 && "sr-only")}>
+                      Add links to your website, blog, or social media profiles.
+                    </FormDescription>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => append({ value: "" })}
+              disabled={fields.length >= 4}
+            >
+              Add URL
+            </Button>
+          </div>
+          <FormField
+            control={form.control}
+            name="applyJob"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormControl>
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel>Apply for a job</FormLabel>
+                  <FormDescription>Check this if you want to apply for a job.</FormDescription>
+                </div>
+              </FormItem>
             )}
-            <Button type="submit">Update profile</Button>
-          </form>
-        </Form>
-        <div className="mt-8">
-          <h2 className="text-lg font-semibold">Form State:</h2>
-          <pre className="mt-2 w-full max-w-2xl overflow-auto text-sm bg-muted p-4 rounded-md">
-            {JSON.stringify(form.watch(), null, 2)}
-          </pre>
-        </div>
+          />
+          {watchApplyJob && (
+            <FormField
+              control={form.control}
+              name="employmentStatus"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Employment Status</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your employment status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="unemployed">Unemployed</SelectItem>
+                      <SelectItem value="employed">Employed</SelectItem>
+                      <SelectItem value="student">Student</SelectItem>
+                      <SelectItem value="retired">Retired</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Select your current employment status.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+          <Button type="submit">Update profile</Button>
+        </form>
+      </Form>
+      <div className="mt-8">
+        <h2 className="text-lg font-semibold">Form State:</h2>
+        <pre className="mt-2 w-full max-w-2xl overflow-auto text-sm bg-muted p-4 rounded-md">
+          {JSON.stringify(form.watch(), null, 2)}
+        </pre>
       </div>
     </ComponentLayout>
   )
 }
-

@@ -1,7 +1,6 @@
 import {
   AlertCircle,
   ArrowRight,
-  Check,
   ChevronLeft,
   ChevronRight,
   Command,
@@ -9,7 +8,6 @@ import {
   File,
   FileText,
   HelpCircle,
-  ImageIcon,
   Laptop,
   Loader2,
   Moon,
@@ -19,7 +17,6 @@ import {
   Settings,
   SunMedium,
   Trash,
-  Twitter,
   User,
   X,
   MousePointer2,
@@ -35,7 +32,6 @@ import {
   MenuIcon,
   List,
   Search,
-  Images,
   FormInput,
   ToggleLeft,
   FoldVertical,
@@ -44,8 +40,9 @@ import {
   GripVertical,
   Upload,
   Download,
-  TypeIcon as type,
+  Calendar,
   type LucideIcon,
+  ImageIcon,
 } from "lucide-react"
 
 export type Icon = LucideIcon
@@ -86,7 +83,7 @@ export const Icons = {
   menu: MenuIcon,
   multiSelect: List,
   autocomplete: Search,
-  carousel: Images,
+  carousel: ImageIcon,
   form: FormInput,
   toggle: ToggleLeft,
   accordion: FoldVertical,
@@ -95,5 +92,5 @@ export const Icons = {
   dragDrop: GripVertical,
   upload: Upload,
   download: Download,
+  calendar: Calendar,
 }
-

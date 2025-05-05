@@ -24,4 +24,3 @@ const ToggleSwitch = React.forwardRef<
 ToggleSwitch.displayName = SwitchPrimitives.Root.displayName
 
 export { ToggleSwitch }
-

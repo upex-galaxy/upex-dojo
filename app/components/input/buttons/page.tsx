@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ComponentLayout } from "@/components/component-layout"
@@ -24,22 +26,29 @@ export default function ButtonsPage() {
 
   return (
     <ComponentLayout>
-      <h1 className="text-3xl font-bold mb-6">Buttons</h1>
-      <div className="space-y-4">
-        <div>
-          <Button onClick={handleClick}>Click me</Button>
-          <p>Clicked: {clickCount} times</p>
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">
+        Buttons
+      </h1>
+      <div className="space-y-4" data-testid="buttons-container">
+        <div data-testid="button-section">
+          <Button onClick={handleClick} data-testid="click-button">
+            Click me
+          </Button>
+          <p data-testid="click-count">Clicked: {clickCount} times</p>
         </div>
-        <div>
-          <Button onDoubleClick={handleDoubleClick}>Double click me</Button>
-          <p>Double clicked: {doubleClickCount} times</p>
+        <div data-testid="button-section">
+          <Button onDoubleClick={handleDoubleClick} data-testid="double-click-button">
+            Double click me
+          </Button>
+          <p data-testid="double-click-count">Double clicked: {doubleClickCount} times</p>
         </div>
-        <div>
-          <Button onContextMenu={handleRightClick}>Right click me</Button>
-          <p>Right clicked: {rightClickCount} times</p>
+        <div data-testid="button-section">
+          <Button onContextMenu={handleRightClick} data-testid="right-click-button">
+            Right click me
+          </Button>
+          <p data-testid="right-click-count">Right clicked: {rightClickCount} times</p>
         </div>
       </div>
     </ComponentLayout>
   )
 }
-

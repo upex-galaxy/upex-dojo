@@ -6,9 +6,10 @@ interface ComponentLayoutProps {
 
 export function ComponentLayout({ children }: ComponentLayoutProps) {
   return (
-    <main className="flex-1 page-background">
-      <div className="container max-w-5xl mx-auto px-4 py-16">{children}</div>
+    <main className="flex-1" data-testid="component-page">
+      <div className="container max-w-5xl mx-auto px-4 py-16" data-testid="component-container">
+        {children}
+      </div>
     </main>
   )
 }
-

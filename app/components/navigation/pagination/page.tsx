@@ -45,33 +45,30 @@ export default function PaginationPage() {
 
   return (
     <ComponentLayout>
-      <div className="container py-10">
-        <h1 className="text-3xl font-bold mb-6">Pagination</h1>
-        <div className="space-y-4">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious onClick={() => handlePageChange(Math.max(1, currentPage - 1))} />
-              </PaginationItem>
-              {renderPageNumbers()}
-              <PaginationItem>
-                <PaginationNext onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))} />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-          <div>
-            <p>Current Page: {currentPage}</p>
-            <p>Total Pages: {totalPages}</p>
-          </div>
-          <div>
-            <Button onClick={() => handlePageChange(1)} className="mr-2">
-              First Page
-            </Button>
-            <Button onClick={() => handlePageChange(totalPages)}>Last Page</Button>
-          </div>
+      <h1 className="text-3xl font-bold mb-6">Pagination</h1>
+      <div className="space-y-4">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious onClick={() => handlePageChange(Math.max(1, currentPage - 1))} />
+            </PaginationItem>
+            {renderPageNumbers()}
+            <PaginationItem>
+              <PaginationNext onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))} />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+        <div>
+          <p>Current Page: {currentPage}</p>
+          <p>Total Pages: {totalPages}</p>
+        </div>
+        <div>
+          <Button onClick={() => handlePageChange(1)} className="mr-2">
+            First Page
+          </Button>
+          <Button onClick={() => handlePageChange(totalPages)}>Last Page</Button>
         </div>
       </div>
     </ComponentLayout>
   )
 }
-
