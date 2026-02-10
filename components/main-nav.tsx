@@ -3,6 +3,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { ModeToggle } from "@/components/mode-toggle"
+import { BookOpen } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export function MainNav() {
   const pathname = usePathname()
@@ -24,6 +26,17 @@ export function MainNav() {
         </span>
       </Link>
       <nav className="flex items-center space-x-6 text-sm font-medium ml-auto" data-testid="nav-actions">
+        <Link
+          href="/guide"
+          className={cn(
+            "flex items-center gap-1.5 transition-colors hover:text-foreground",
+            pathname === "/guide" ? "text-foreground" : "text-muted-foreground"
+          )}
+          data-testid="nav-guide-link"
+        >
+          <BookOpen className="h-4 w-4" />
+          <span className="hidden sm:inline">Guide</span>
+        </Link>
         <ModeToggle />
       </nav>
     </div>
