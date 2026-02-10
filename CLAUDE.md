@@ -4,146 +4,247 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-UPEX DOJO is a QA automation practice platform built with Next.js 15. It provides:
-- Interactive UI components for QA engineers to practice test automation
-- Backend API with authentication and task management
-- PostgreSQL database via Neon with Drizzle ORM
-- OpenAPI documentation at /api/docs
+UPEX DOJO is a QA automation practice platform with:
+- **Frontend:** Component gallery (24 UI components) for testing practice
+- **Backend:** REST API with auth, tasks CRUD, OpenAPI docs
+- **Database:** PostgreSQL (Neon) with multi-tenant isolation
+- **Dashboard:** Kanban task board with drag & drop
 
-## Development Commands
+Production: `dojo.upexgalaxy.com` | Docs: `/api/docs`
+
+## Commands
 
 ```bash
-# Use bun as package manager
-bun install       # Install dependencies
-bun run dev       # Start development server (localhost:3000)
-bun run build     # Build for production
-bun start         # Start production server
-bun run lint      # Run Next.js linting
+bun install          # Install dependencies
+bun run dev          # Dev server (localhost:3000)
+bun run build        # Production build
+bun run typecheck    # TypeScript validation
+bun run lint         # ESLint
 
-# Database commands
-bun run db:generate   # Generate Drizzle migrations
-bun run db:migrate    # Apply migrations
-bun run db:push       # Push schema directly (dev)
-bun run db:seed       # Seed demo users
-bun run db:studio     # Open Drizzle Studio
+# Database
+bun run db:push      # Push schema (dev)
+bun run db:seed      # Seed demo users
+bun run db:studio    # Drizzle Studio
+bun run db:generate  # Generate migrations
+bun run db:migrate   # Apply migrations
 ```
 
-## Technology Stack
+## Tech Stack
 
-- **Framework:** Next.js 15.2.4 with App Router
-- **React:** 19
-- **Language:** TypeScript 5
-- **UI Components:** shadcn/ui (Radix UI + Tailwind CSS)
-- **Styling:** Tailwind CSS 3.4 with CSS variables for theming
-- **Forms:** react-hook-form + Zod validation
-- **Icons:** lucide-react
-- **Database:** PostgreSQL (Neon) + Drizzle ORM
-- **Authentication:** Auth.js v5 (NextAuth)
-- **Drag & Drop:** @dnd-kit
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 15 (App Router) + React 19 |
+| Language | TypeScript 5 |
+| UI | shadcn/ui + Radix UI + Tailwind CSS |
+| Database | PostgreSQL (Neon) + Drizzle ORM |
+| Auth | Auth.js v5 (JWT + Credentials) |
+| Validation | Zod |
+| Drag & Drop | @dnd-kit |
+| API Docs | OpenAPI 3.0 (@asteasolutions/zod-to-openapi) |
 
 ## Architecture
 
-### Directory Structure
+```
+app/
+├── api/                    # API Routes
+│   ├── auth/               # NextAuth + register + me
+│   ├── tasks/              # CRUD + status endpoint
+│   ├── docs/               # Swagger UI
+│   └── swagger.json/       # OpenAPI spec
+├── dashboard/              # Protected routes
+│   ├── components/         # TaskBoard, TaskCard, TaskColumn, TaskModal
+│   └── profile/
+├── login/ & register/      # Auth pages
+├── components/             # Component gallery (public)
+└── guide/                  # Backend integration guide
 
-- `app/` - Next.js App Router pages
-  - `app/components/` - Component showcase pages organized by category
-  - `app/dashboard/` - Authenticated dashboard with Task Board
-  - `app/login/` and `app/register/` - Auth pages
-  - `app/api/` - API routes (auth, tasks, docs)
-  - `app/layout.tsx` - Root layout with ThemeProvider
-  - `app/globals.css` - Global styles with CSS variables
-- `components/` - Reusable components
-  - `components/ui/` - shadcn/ui primitives (59 components)
-  - Other files: shared layout components
-- `db/` - Database layer
-  - `db/schema.ts` - Drizzle schema (users, tasks)
-  - `db/index.ts` - Database client
-  - `db/seed.ts` - Seed script
-- `lib/` - Utilities
-  - `lib/auth.ts` - Auth.js configuration
-  - `lib/swagger.ts` - OpenAPI spec generator
-  - `lib/task-limit.ts` - Task limit helper
-  - `lib/utils.ts` - `cn()` utility
-- `hooks/` - Custom hooks
-
-### Path Aliases
-
-- `@/*` maps to project root (e.g., `@/components/ui/button`)
-
-## Key Conventions
-
-### Test Attributes
-
-All interactive elements must include `data-testid` attributes for QA automation:
-```tsx
-<Button data-testid="submit-button">Submit</Button>
-<div data-testid="modal-container">...</div>
+components/ui/              # shadcn/ui primitives
+db/                         # Schema, client, seed, migrations
+lib/                        # auth.ts, swagger.ts, task-limit.ts, utils.ts
 ```
 
-### Component Page Structure
+## Data Model
 
-Component pages follow this pattern:
+```typescript
+// Task status: 'backlog' | 'in_progress' | 'done'
+// Task priority: 'low' | 'medium' | 'high'
+// Limit: 30 tasks per user
+```
+
+**Tables:** `users` (id, email, passwordHash, name) → `tasks` (cascade delete)
+
+## API Reference
+
+| Endpoint | Method | Auth | Description |
+|----------|--------|------|-------------|
+| `/api/auth/register` | POST | No | Create account |
+| `/api/auth/[...nextauth]` | * | No | NextAuth handlers |
+| `/api/auth/me` | GET | Yes | Current user |
+| `/api/tasks` | GET | Yes | List tasks |
+| `/api/tasks` | POST | Yes | Create task |
+| `/api/tasks/:id` | GET/PUT/DELETE | Yes | Task CRUD |
+| `/api/tasks/:id/status` | PATCH | Yes | Update status (drag&drop) |
+
+## Demo Users (Protected)
+
+```
+testuser@upex.dev / Test123!
+admin@upex.dev / Admin123!
+```
+
+## Environment Variables
+
+```bash
+DATABASE_URL="postgres://..."      # Neon connection
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret"
+```
+
+---
+
+# Code Guidelines
+
+## General
+
+- Use `@/*` path aliases (e.g., `@/components/ui/button`)
+- Run `bun run typecheck` before commits
+- All interactive elements MUST have `data-testid` attributes
+
+## Frontend
+
+### Components
+
 ```tsx
-"use client"
+"use client"  // Only when needed (hooks, events, browser APIs)
 
-import { ComponentLayout } from "@/components/component-layout"
-import { SomeUIComponent } from "@/components/ui/some-component"
-
-export default function SomePage() {
-  return (
-    <ComponentLayout>
-      <h1 data-testid="page-title">Component Name</h1>
-      <div data-testid="component-container">
-        {/* Implementation */}
-      </div>
-    </ComponentLayout>
-  )
-}
+// Always include data-testid for QA automation
+<Button data-testid="submit-button">Submit</Button>
+<Input data-testid="email-input" />
 ```
 
 ### Styling
 
-- Use Tailwind utility classes exclusively
-- Use `cn()` for conditional class merging
-- Dark mode via class-based theme switching (next-themes)
-- Colors use HSL CSS variables defined in globals.css
+- Tailwind utility classes only (no inline styles)
+- Use `cn()` from `@/lib/utils` for conditional classes
+- Dark mode: class-based via `next-themes`
+- Colors: HSL CSS variables in `globals.css`
 
-### Adding shadcn/ui Components
+### State & Forms
 
-The project uses shadcn/ui CLI. Configuration is in `components.json`:
-- Components install to `components/ui/`
-- Uses lucide-react for icons
+- `react-hook-form` + `zod` for forms
+- No prop drilling: use context or server components
+- Prefer server components; use `"use client"` only when necessary
 
-## API Endpoints
+### Patterns
 
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/callback/credentials` - Login
-- `GET /api/auth/me` - Get current user (requires auth)
+```tsx
+// Component page pattern
+export default function SomePage() {
+  return (
+    <ComponentLayout>
+      <h1 data-testid="page-title">Title</h1>
+      <div data-testid="component-container">
+        {/* Content */}
+      </div>
+    </ComponentLayout>
+  )
+}
 
-### Tasks (all require auth)
-- `GET /api/tasks` - List user's tasks
-- `POST /api/tasks` - Create task (max 30/user)
-- `GET /api/tasks/:id` - Get task
-- `PUT /api/tasks/:id` - Update task
-- `DELETE /api/tasks/:id` - Delete task
-- `PATCH /api/tasks/:id/status` - Update status (drag & drop)
-
-### Documentation
-- `GET /api/docs` - Swagger UI
-- `GET /api/swagger.json` - OpenAPI 3.0 spec
-
-## Demo Users
-
-Protected demo accounts (never deleted by cleanup):
-- `testuser@upex.dev` / `Test123!`
-- `admin@upex.dev` / `Admin123!`
-
-## Environment Variables
-
-Required in `.env.local`:
-```bash
-DATABASE_URL="postgres://..."  # Neon connection string
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-key"
+// Dashboard components pattern
+// Located in app/dashboard/components/
+// Use @dnd-kit hooks for drag & drop
 ```
+
+## Backend
+
+### API Routes
+
+```typescript
+// Always validate with Zod
+const schema = z.object({
+  title: z.string().min(1).max(200),
+});
+
+// Always check authentication
+const session = await auth();
+if (!session?.user?.id) {
+  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+}
+
+// Multi-tenant: ALWAYS filter by userId
+const tasks = await db.query.tasks.findMany({
+  where: eq(tasks.userId, session.user.id),
+});
+```
+
+### Response Format
+
+```typescript
+// Success
+return NextResponse.json({ data }, { status: 200 });
+
+// Error
+return NextResponse.json({ error: 'Message' }, { status: 4XX });
+
+// List with meta
+return NextResponse.json({
+  tasks: [...],
+  meta: { count, maxAllowed, remaining }
+});
+```
+
+### Database
+
+```typescript
+// Use Drizzle query builder
+import { db, tasks, users } from '@/db';
+import { eq, and, desc } from 'drizzle-orm';
+
+// Always use transactions for multiple writes
+await db.transaction(async (tx) => {
+  await tx.insert(tasks).values(data);
+  await tx.update(users).set({ updatedAt: new Date() });
+});
+```
+
+### Auth Pattern
+
+```typescript
+// In API routes
+import { auth } from '@/lib/auth';
+const session = await auth();
+
+// In server components
+import { auth } from '@/lib/auth';
+const session = await auth();
+if (!session) redirect('/login');
+
+// Session type includes user.id (extended in lib/auth.ts)
+```
+
+## Security
+
+- Validate ALL inputs with Zod
+- Never expose passwordHash in responses
+- Multi-tenant isolation: filter queries by `userId`
+- Use `bcryptjs` for password hashing (10 rounds)
+- Sanitize error messages (no stack traces in production)
+
+## Testing Attributes
+
+Every interactive element needs `data-testid`:
+
+```tsx
+// Naming convention: {context}-{element}-{identifier?}
+data-testid="login-submit-button"
+data-testid="task-card-{id}"
+data-testid="column-backlog"
+data-testid="task-menu-{id}"
+```
+
+## File Naming
+
+- Components: PascalCase (`TaskCard.tsx`)
+- Utilities: camelCase (`taskLimit.ts`)
+- API routes: `route.ts` in folder structure
+- Pages: `page.tsx` in folder structure

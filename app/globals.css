@@ -3,80 +3,59 @@
 @tailwind utilities;
 
 @layer base {
+  /* Dark mode only - GitHub Dark inspired + Neon Violet accents */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
+    color-scheme: dark;
 
-    --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
+    /* GitHub Dark background colors */
+    --background: 215 28% 7%;           /* #0d1117 */
+    --foreground: 210 25% 93%;          /* #e6edf3 */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
+    --card: 215 22% 11%;                /* #161b22 */
+    --card-foreground: 210 25% 93%;
 
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 20% 98%;
+    --popover: 215 22% 11%;
+    --popover-foreground: 210 25% 93%;
 
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
+    /* Neon Violet accent */
+    --primary: 270 91% 65%;             /* #a855f7 */
+    --primary-foreground: 210 25% 98%;
 
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
+    --secondary: 215 18% 15%;           /* #21262d */
+    --secondary-foreground: 210 25% 93%;
 
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
+    --muted: 215 18% 15%;
+    --muted-foreground: 212 10% 58%;    /* #8b949e */
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
+    --accent: 215 18% 18%;
+    --accent-foreground: 210 25% 93%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 262.1 83.3% 57.8%;
+    --destructive: 0 72% 51%;           /* Vibrant red */
+    --destructive-foreground: 210 25% 98%;
+
+    /* GitHub Dark borders */
+    --border: 215 14% 21%;              /* #30363d */
+    --input: 215 14% 25%;
+    --ring: 270 91% 65%;                /* Violet focus ring */
 
     --radius: 0.5rem;
 
-    /* Chart colors */
-    --chart-1: 262.1 83.3% 57.8%;
-    --chart-2: 221 83.2% 53.3%;
-    --chart-3: 198 93.2% 59.6%;
-    --chart-4: 158.4 64.4% 51.6%;
-    --chart-5: 130.4 55.6% 52.5%;
-  }
+    /* Chart colors - Neon theme */
+    --chart-1: 270 91% 65%;             /* Violet */
+    --chart-2: 187 94% 53%;             /* Cyan */
+    --chart-3: 142 71% 45%;             /* Green */
+    --chart-4: 38 92% 50%;              /* Orange */
+    --chart-5: 326 78% 60%;             /* Pink */
 
-  .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-
-    --primary: 263.4 70% 50.4%;
-    --primary-foreground: 210 20% 98%;
-
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 263.4 70% 50.4%;
-
-    /* Chart colors for dark mode */
-    --chart-1: 262.1 83.3% 67.8%;
-    --chart-2: 221 83.2% 63.3%;
-    --chart-3: 198 93.2% 69.6%;
-    --chart-4: 158.4 64.4% 61.6%;
-    --chart-5: 130.4 55.6% 62.5%;
+    /* Sidebar (if used) */
+    --sidebar-background: 215 28% 7%;
+    --sidebar-foreground: 210 25% 93%;
+    --sidebar-primary: 270 91% 65%;
+    --sidebar-primary-foreground: 210 25% 98%;
+    --sidebar-accent: 215 18% 15%;
+    --sidebar-accent-foreground: 210 25% 93%;
+    --sidebar-border: 215 14% 21%;
+    --sidebar-ring: 270 91% 65%;
   }
 }
 
@@ -84,6 +63,11 @@
   * {
     @apply border-border;
   }
+
+  html {
+    color-scheme: dark;
+  }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -105,7 +89,7 @@ textarea {
   @apply bg-background border-input text-foreground;
 }
 
-/* Ensure links are visible in both themes */
+/* Ensure links are visible */
 a:not([class]) {
   @apply text-primary hover:text-primary/80 underline-offset-4 hover:underline;
 }
@@ -123,4 +107,22 @@ td {
 /* Ensure proper contrast for code */
 code {
   @apply bg-muted text-primary px-1 py-0.5 rounded;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground;
 }

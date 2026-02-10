@@ -29,7 +29,7 @@ const components = [
   { name: "Shipping Form", icon: Icons.form, href: "/components/forms/shipping-information" },
 ]
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <HeroBanner />
