@@ -47,7 +47,7 @@
 | Component Gallery | OK | 24 componentes para practicar testing |
 | Drag & Drop (@dnd-kit) | OK | Ya instalado, perfecto para Kanban |
 | TypeScript | OK | Tipado completo |
-| Producción | OK | dojo.upexgalaxy.com |
+| Staging (Práctica) | OK | dojo.upexgalaxy.com |
 | data-testid | OK | Ya implementados |
 
 ### Lo que FALTA (requerido por este boilerplate):
@@ -400,13 +400,9 @@ jobs:
 Para un reset total (restaurar a estado inicial), usamos el comando `reset` de Neon:
 
 ```
-main (estado base con demo users)
+staging (branch única) ──────► dojo.upexgalaxy.com (ambiente de práctica)
   │
-  ├── branch "production" ──────► dojo.upexgalaxy.com
-  │
-  └── branch "staging" ──────────► staging.dojo.upexgalaxy.com
-        │
-        └── (se resetea desde main cuando sea necesario)
+  └── (se resetea cuando sea necesario con db-cleanup.yml cada 48h)
 ```
 
 **Comando para reset completo (preserva el connection string):**
@@ -532,11 +528,12 @@ dsn = "sqlite:///./demo.db"
 
 ### Estructura de Ambientes
 
-| Ambiente | URL App | URL API | Database (Neon Branch) | Propósito |
-|----------|---------|---------|------------------------|-----------|
-| Local | localhost:3000 | localhost:3000/api | Branch `dev` o local PG | Desarrollo |
-| Staging | staging.dojo.upexgalaxy.com | staging.dojo.upexgalaxy.com/api | Branch `staging` | QA/Testing |
-| Production | dojo.upexgalaxy.com | dojo.upexgalaxy.com/api | Branch `production` | Producción |
+| Ambiente | URL App | URL API | Database (Neon) | Propósito |
+|----------|---------|---------|-----------------|-----------|
+| Local | localhost:3000 | localhost:3000/api | Neon (compartida) | Desarrollo |
+| Staging | dojo.upexgalaxy.com | dojo.upexgalaxy.com/api | Neon (compartida) | Práctica QA |
+
+> **Nota**: Este proyecto es exclusivamente para práctica. No existe ambiente de producción. La URL `dojo.upexgalaxy.com` es el ambiente de staging/práctica.
 
 ### Consideración: Cold Start de Neon
 
@@ -545,21 +542,18 @@ dsn = "sqlite:///./demo.db"
 ### Variables de Entorno
 
 ```bash
-# .env.local (desarrollo)
-DATABASE_URL="postgres://user:pass@ep-dev.us-east-2.aws.neon.tech/neondb?sslmode=require"
+# .env.local (desarrollo local)
+DATABASE_URL="postgres://user:pass@ep-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require"
 NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="dev-secret-change-in-production"
+NEXTAUTH_SECRET="dev-secret-change-in-staging"
 
-# .env.staging (Vercel Environment Variables)
-DATABASE_URL="postgres://user:pass@ep-staging.us-east-2.aws.neon.tech/neondb?sslmode=require"
-NEXTAUTH_URL="https://staging.dojo.upexgalaxy.com"
-NEXTAUTH_SECRET="staging-secret-key"
-
-# .env.production
-DATABASE_URL="postgres://user:pass@ep-prod.us-east-2.aws.neon.tech/neondb?sslmode=require"
+# Vercel Environment Variables (staging - dojo.upexgalaxy.com)
+DATABASE_URL="postgres://user:pass@ep-xxx.us-east-2.aws.neon.tech/neondb?sslmode=require"
 NEXTAUTH_URL="https://dojo.upexgalaxy.com"
-NEXTAUTH_SECRET="production-secret-key"
+NEXTAUTH_SECRET="staging-secret-key"
 ```
+
+> **Nota**: Se usa la misma base de datos Neon para local y staging. El cleanup automático cada 48h mantiene los datos limpios.
 
 ### Actualización en este Boilerplate
 
@@ -572,8 +566,8 @@ const envDataMap: Record<Environment, { base: string, api: string, user: {...} }
     user: userCredentialsMap.local,
   },
   devstage: {
-    base: 'https://staging.dojo.upexgalaxy.com',
-    api: 'https://staging.dojo.upexgalaxy.com/api',
+    base: 'https://dojo.upexgalaxy.com',
+    api: 'https://dojo.upexgalaxy.com/api',
     user: userCredentialsMap.devstage,
   },
 };

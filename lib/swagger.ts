@@ -301,12 +301,8 @@ export const openApiDocument = generator.generateDocument({
       description: 'Local development',
     },
     {
-      url: 'https://staging.dojo.upexgalaxy.com',
-      description: 'Staging environment',
-    },
-    {
       url: 'https://dojo.upexgalaxy.com',
-      description: 'Production',
+      description: 'Staging (Practice environment)',
     },
   ],
   tags: [

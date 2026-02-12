@@ -10,7 +10,7 @@ UPEX DOJO is a QA automation practice platform with:
 - **Database:** PostgreSQL (Neon) with multi-tenant isolation
 - **Dashboard:** Kanban task board with drag & drop
 
-Production: `dojo.upexgalaxy.com` | Docs: `/api/docs`
+Staging (Practice): `dojo.upexgalaxy.com` | Docs: `/api/docs`
 
 ## Commands
 
