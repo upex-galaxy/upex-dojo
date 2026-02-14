@@ -71,6 +71,12 @@ const LoginSchema = z.object({
   password: z.string().min(6),
 });
 
+const LoginResponseSchema = z.object({
+  access_token: z.string(),
+  token_type: z.literal('Bearer'),
+  expires_in: z.number().int(),
+});
+
 // Register schemas
 registry.register('Error', ErrorSchema);
 registry.register('User', UserSchema);
@@ -80,6 +86,7 @@ registry.register('UpdateTask', UpdateTaskSchema);
 registry.register('UpdateStatus', UpdateStatusSchema);
 registry.register('Register', RegisterSchema);
 registry.register('Login', LoginSchema);
+registry.register('LoginResponse', LoginResponseSchema);
 
 // Auth endpoints
 registry.registerPath({
@@ -111,16 +118,25 @@ registry.registerPath({
 
 registry.registerPath({
   method: 'post',
-  path: '/api/auth/callback/credentials',
+  path: '/api/auth/login',
   tags: ['Authentication'],
-  summary: 'Login with credentials',
+  summary: 'Login with credentials (returns JWT token)',
+  description: 'Authenticate with email and password to receive a JWT access token. Use this token in the Authorization header for subsequent requests.',
   request: {
     body: {
       content: { 'application/json': { schema: LoginSchema } },
     },
   },
   responses: {
-    200: { description: 'Login successful' },
+    200: {
+      description: 'Login successful',
+      content: {
+        'application/json': {
+          schema: LoginResponseSchema,
+        },
+      },
+    },
+    400: { description: 'Invalid email or password format' },
     401: { description: 'Invalid credentials' },
   },
 });
@@ -130,6 +146,7 @@ registry.registerPath({
   path: '/api/auth/me',
   tags: ['Authentication'],
   summary: 'Get current user',
+  description: 'Returns the current authenticated user. Accepts either a Bearer token in the Authorization header or a session cookie.',
   security: [{ bearerAuth: [] }],
   responses: {
     200: {
@@ -141,6 +158,7 @@ registry.registerPath({
       },
     },
     401: { description: 'Unauthorized' },
+    404: { description: 'User not found' },
   },
 });
 

@@ -135,8 +135,9 @@ Full REST API for practicing API automation. See interactive docs at [`/api/docs
 | Endpoint | Method | Auth | Description |
 |----------|--------|------|-------------|
 | `/api/auth/register` | POST | No | Create new account |
-| `/api/auth/[...nextauth]` | * | No | NextAuth.js handlers (login/logout) |
-| `/api/auth/me` | GET | Yes | Get current user info |
+| `/api/auth/login` | POST | No | Login (returns JWT token) |
+| `/api/auth/[...nextauth]` | * | No | NextAuth.js handlers (session-based) |
+| `/api/auth/me` | GET | Yes | Get current user info (Bearer token or session) |
 
 ### Tasks (CRUD)
 
@@ -157,15 +158,20 @@ curl -X POST https://dojo.upexgalaxy.com/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"email": "test@example.com", "password": "Test123!", "name": "Test"}'
 
-# Login (get session)
-curl -X POST https://dojo.upexgalaxy.com/api/auth/callback/credentials \
+# Login (get JWT token)
+curl -X POST https://dojo.upexgalaxy.com/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email": "testuser@upex.dev", "password": "Test123!"}'
+# Response: { "access_token": "eyJ...", "token_type": "Bearer", "expires_in": 86400 }
 
-# Create task (with auth cookie)
+# Get current user (with Bearer token)
+curl https://dojo.upexgalaxy.com/api/auth/me \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+
+# Create task (with Bearer token)
 curl -X POST https://dojo.upexgalaxy.com/api/tasks \
   -H "Content-Type: application/json" \
-  -H "Cookie: next-auth.session-token=..." \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -d '{"title": "My Task", "status": "backlog", "priority": "medium"}'
 ```
 

@@ -315,19 +315,46 @@ sslmode = "require"`}
             <div>
               <h4 className="font-semibold mb-2">1. Obtener token de autenticación</h4>
               <p className="text-sm text-muted-foreground mb-3">
-                Primero, haz login para obtener un token:
+                Primero, haz login para obtener un JWT token:
               </p>
               <CodeBlock
                 language="bash"
-                code={`curl -X POST http://localhost:3000/api/auth/callback/credentials \\
+                code={`curl -X POST http://localhost:3000/api/auth/login \\
   -H "Content-Type: application/json" \\
   -d '{"email": "testuser@upex.dev", "password": "Test123!"}'`}
               />
+              <p className="text-sm text-muted-foreground mt-3 mb-2">
+                Respuesta:
+              </p>
+              <CodeBlock
+                language="json"
+                code={`{
+  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+  "token_type": "Bearer",
+  "expires_in": 86400
+}`}
+              />
             </div>
 
-            {/* Step 2: Configure MCP */}
+            {/* Step 2: Use token */}
             <div>
-              <h4 className="font-semibold mb-2">2. Configurar OpenAPI MCP</h4>
+              <h4 className="font-semibold mb-2">2. Usar el token en requests</h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                Usa el <code className="bg-muted px-1 rounded">access_token</code> en el header Authorization:
+              </p>
+              <CodeBlock
+                language="bash"
+                code={`curl http://localhost:3000/api/auth/me \\
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+
+curl http://localhost:3000/api/tasks \\
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"`}
+              />
+            </div>
+
+            {/* Step 3: Configure MCP */}
+            <div>
+              <h4 className="font-semibold mb-2">3. Configurar OpenAPI MCP</h4>
               <p className="text-sm text-muted-foreground mb-3">
                 Agrega en tu <code className="bg-muted px-1 rounded">.mcp.json</code>:
               </p>
@@ -351,7 +378,7 @@ sslmode = "require"`}
 
             {/* Example usage */}
             <div>
-              <h4 className="font-semibold mb-2">3. Ejemplos de uso en Claude</h4>
+              <h4 className="font-semibold mb-2">4. Ejemplos de uso en Claude</h4>
               <div className="bg-muted/50 p-4 rounded-lg text-sm space-y-2">
                 <p>• &ldquo;Lista todos mis tasks&rdquo;</p>
                 <p>• &ldquo;Crea una nueva task con título &apos;Test automation&apos;&rdquo;</p>
@@ -401,8 +428,8 @@ sslmode = "require"`}
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge className="bg-green-600">POST</Badge>
-                  <code>/api/auth/callback/credentials</code>
-                  <span className="text-muted-foreground">- Login</span>
+                  <code>/api/auth/login</code>
+                  <span className="text-muted-foreground">- Login (JWT)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge className="bg-blue-600">GET</Badge>
