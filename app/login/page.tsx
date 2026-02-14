@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, KeyRound, Copy, Check } from "lucide-react";
 
 function LoginForm() {
   const router = useRouter();
@@ -20,6 +20,13 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [copied, setCopied] = useState<"email" | "password" | null>(null);
+
+  const copyToClipboard = async (text: string, field: "email" | "password") => {
+    await navigator.clipboard.writeText(text);
+    setCopied(field);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +55,63 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4" data-testid="login-page">
-      <Card className="w-full max-w-md" data-testid="login-card">
+      <div className="w-full max-w-md space-y-4">
+        {/* Demo Credentials Banner */}
+        <div
+          className="rounded-lg border border-primary/20 bg-primary/5 p-4"
+          data-testid="demo-credentials-banner"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <KeyRound className="h-4 w-4 text-primary" />
+            <span className="font-semibold text-sm">Demo Credentials</span>
+          </div>
+          <div className="space-y-2 text-sm">
+            <div className="flex items-center justify-between">
+              <span>
+                <span className="text-muted-foreground">Email: </span>
+                <code className="font-mono bg-background/50 px-1 rounded" data-testid="demo-email-value">
+                  testuser@upex.dev
+                </code>
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => copyToClipboard("testuser@upex.dev", "email")}
+                data-testid="copy-email-button"
+              >
+                {copied === "email" ? (
+                  <Check className="h-3.5 w-3.5 text-green-500" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5" />
+                )}
+              </Button>
+            </div>
+            <div className="flex items-center justify-between">
+              <span>
+                <span className="text-muted-foreground">Password: </span>
+                <code className="font-mono bg-background/50 px-1 rounded" data-testid="demo-password-value">
+                  Test123!
+                </code>
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => copyToClipboard("Test123!", "password")}
+                data-testid="copy-password-button"
+              >
+                {copied === "password" ? (
+                  <Check className="h-3.5 w-3.5 text-green-500" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5" />
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <Card data-testid="login-card">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center" data-testid="login-title">
             Welcome back
@@ -121,6 +184,7 @@ function LoginForm() {
           </CardFooter>
         </form>
       </Card>
+      </div>
     </div>
   );
 }
