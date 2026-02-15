@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
+import { getAuthUserId } from '@/lib/auth';
 import { db, tasks } from '@/db';
 import { eq, and } from 'drizzle-orm';
 import { z } from 'zod';
@@ -15,17 +15,17 @@ const updateTaskSchema = z.object({
 type Params = Promise<{ id: string }>;
 
 // GET /api/tasks/:id - Get a specific task
-export async function GET(_request: NextRequest, { params }: { params: Params }) {
+export async function GET(request: NextRequest, { params }: { params: Params }) {
   try {
-    const session = await auth();
+    const userId = await getAuthUserId(request);
     const { id } = await params;
 
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const task = await db.query.tasks.findFirst({
-      where: and(eq(tasks.id, id), eq(tasks.userId, session.user.id)),
+      where: and(eq(tasks.id, id), eq(tasks.userId, userId)),
     });
 
     if (!task) {
@@ -42,16 +42,16 @@ export async function GET(_request: NextRequest, { params }: { params: Params })
 // PUT /api/tasks/:id - Update a task
 export async function PUT(request: NextRequest, { params }: { params: Params }) {
   try {
-    const session = await auth();
+    const userId = await getAuthUserId(request);
     const { id } = await params;
 
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if task exists and belongs to user
     const existingTask = await db.query.tasks.findFirst({
-      where: and(eq(tasks.id, id), eq(tasks.userId, session.user.id)),
+      where: and(eq(tasks.id, id), eq(tasks.userId, userId)),
     });
 
     if (!existingTask) {
@@ -76,7 +76,7 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
     const [updatedTask] = await db
       .update(tasks)
       .set(updateData)
-      .where(and(eq(tasks.id, id), eq(tasks.userId, session.user.id)))
+      .where(and(eq(tasks.id, id), eq(tasks.userId, userId)))
       .returning();
 
     return NextResponse.json(updatedTask);
@@ -87,18 +87,18 @@ export async function PUT(request: NextRequest, { params }: { params: Params }) 
 }
 
 // DELETE /api/tasks/:id - Delete a task
-export async function DELETE(_request: NextRequest, { params }: { params: Params }) {
+export async function DELETE(request: NextRequest, { params }: { params: Params }) {
   try {
-    const session = await auth();
+    const userId = await getAuthUserId(request);
     const { id } = await params;
 
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if task exists and belongs to user
     const existingTask = await db.query.tasks.findFirst({
-      where: and(eq(tasks.id, id), eq(tasks.userId, session.user.id)),
+      where: and(eq(tasks.id, id), eq(tasks.userId, userId)),
     });
 
     if (!existingTask) {
@@ -107,7 +107,7 @@ export async function DELETE(_request: NextRequest, { params }: { params: Params
 
     await db
       .delete(tasks)
-      .where(and(eq(tasks.id, id), eq(tasks.userId, session.user.id)));
+      .where(and(eq(tasks.id, id), eq(tasks.userId, userId)));
 
     return NextResponse.json({ message: 'Task deleted successfully' });
   } catch (error) {

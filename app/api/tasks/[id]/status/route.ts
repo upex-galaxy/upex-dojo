@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
+import { getAuthUserId } from '@/lib/auth';
 import { db, tasks } from '@/db';
 import { eq, and } from 'drizzle-orm';
 import { z } from 'zod';
@@ -14,16 +14,16 @@ type Params = Promise<{ id: string }>;
 // PATCH /api/tasks/:id/status - Update task status (for drag & drop)
 export async function PATCH(request: NextRequest, { params }: { params: Params }) {
   try {
-    const session = await auth();
+    const userId = await getAuthUserId(request);
     const { id } = await params;
 
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if task exists and belongs to user
     const existingTask = await db.query.tasks.findFirst({
-      where: and(eq(tasks.id, id), eq(tasks.userId, session.user.id)),
+      where: and(eq(tasks.id, id), eq(tasks.userId, userId)),
     });
 
     if (!existingTask) {
@@ -55,7 +55,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
       const columnTasks = await db
         .select()
         .from(tasks)
-        .where(and(eq(tasks.userId, session.user.id)));
+        .where(and(eq(tasks.userId, userId)));
 
       const statusTasks = columnTasks.filter((t) => t.status === status);
       const maxPosition = Math.max(0, ...statusTasks.map((t) => t.position ?? 0));
@@ -65,7 +65,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Params }
     const [updatedTask] = await db
       .update(tasks)
       .set(updateData)
-      .where(and(eq(tasks.id, id), eq(tasks.userId, session.user.id)))
+      .where(and(eq(tasks.id, id), eq(tasks.userId, userId)))
       .returning();
 
     return NextResponse.json(updatedTask);

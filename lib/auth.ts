@@ -4,6 +4,7 @@ import { db, users } from '@/db';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { jwtVerify } from 'jose';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -79,4 +80,32 @@ declare module 'next-auth' {
       name: string;
     };
   }
+}
+
+/**
+ * Get authenticated user ID from either Bearer token or session cookie.
+ * Use this in API routes that need to support both authentication methods.
+ *
+ * @param request - The incoming request (optional, only needed for Bearer token)
+ * @returns The user ID if authenticated, null otherwise
+ */
+export async function getAuthUserId(request?: Request): Promise<string | null> {
+  // Try Bearer token first if request is provided
+  if (request) {
+    const authHeader = request.headers.get('Authorization');
+    if (authHeader?.startsWith('Bearer ')) {
+      const token = authHeader.slice(7);
+      try {
+        const secret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+        const { payload } = await jwtVerify(token, secret);
+        return payload.id as string;
+      } catch {
+        // Token invalid, will try session below
+      }
+    }
+  }
+
+  // Fall back to session cookie
+  const session = await auth();
+  return session?.user?.id ?? null;
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
+import { getAuthUserId } from '@/lib/auth';
 import { db, tasks } from '@/db';
 import { eq, desc } from 'drizzle-orm';
 import { z } from 'zod';
@@ -13,18 +13,18 @@ const createTaskSchema = z.object({
 });
 
 // GET /api/tasks - List all tasks for the authenticated user
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
+    const userId = await getAuthUserId(request);
 
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const userTasks = await db
       .select()
       .from(tasks)
-      .where(eq(tasks.userId, session.user.id))
+      .where(eq(tasks.userId, userId))
       .orderBy(desc(tasks.createdAt));
 
     const taskCount = userTasks.length;
@@ -46,15 +46,15 @@ export async function GET() {
 // POST /api/tasks - Create a new task
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const userId = await getAuthUserId(request);
 
-    if (!session?.user?.id) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check task limit
-    if (await hasReachedTaskLimit(session.user.id)) {
-      const currentCount = await getTaskCount(session.user.id);
+    if (await hasReachedTaskLimit(userId)) {
+      const currentCount = await getTaskCount(userId);
       return NextResponse.json(taskLimitError(currentCount), { status: 429 });
     }
 
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     const existingTasks = await db
       .select()
       .from(tasks)
-      .where(eq(tasks.userId, session.user.id));
+      .where(eq(tasks.userId, userId));
 
     const statusTasks = existingTasks.filter((t) => t.status === status);
     const maxPosition = Math.max(0, ...statusTasks.map((t) => t.position ?? 0));
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     const [newTask] = await db
       .insert(tasks)
       .values({
-        userId: session.user.id,
+        userId,
         title,
         description,
         priority,
