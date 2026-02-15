@@ -36,13 +36,15 @@ const profileFormSchema = z.object({
       }),
     )
     .max(4, { message: "You can add a maximum of 4 URLs." }),
-  applyJob: z.boolean().default(false),
+  applyJob: z.boolean(),
   employmentStatus: z.string().optional(),
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
-const defaultValues: Partial<ProfileFormValues> = {
+const defaultValues: ProfileFormValues = {
+  username: "",
+  email: "",
   bio: "",
   urls: [{ value: "https://example.com" }],
   applyJob: false,

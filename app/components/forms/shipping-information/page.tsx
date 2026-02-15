@@ -21,7 +21,7 @@ const formSchema = z.object({
   state: z.string().min(2, { message: "Please select a state" }),
   zipCode: z.string().min(5, { message: "Zip code must be at least 5 characters" }),
   country: z.string().min(2, { message: "Please select a country" }),
-  saveInfo: z.boolean().default(false),
+  saveInfo: z.boolean(),
 })
 
 type FormValues = z.infer<typeof formSchema>

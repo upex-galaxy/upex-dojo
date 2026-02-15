@@ -84,7 +84,7 @@ export default function DatePickersPage() {
                   mode="single"
                   selected={date}
                   onSelect={setDate}
-                  initialFocus
+                  autoFocus
                   data-testid="date-picker-calendar"
                 />
               </PopoverContent>
@@ -129,7 +129,7 @@ export default function DatePickersPage() {
                   mode="range"
                   selected={dateRange}
                   onSelect={setDateRange}
-                  initialFocus
+                  autoFocus
                   numberOfMonths={2}
                   data-testid="date-range-picker-calendar"
                 />
@@ -178,22 +178,16 @@ export default function DatePickersPage() {
                   mode="single"
                   selected={month}
                   onSelect={setMonth}
-                  initialFocus
-                  captionLayout="dropdown-buttons"
-                  fromYear={2020}
-                  toYear={2030}
-                  formatters={{ formatCaption: () => "" }} // Hide the default caption
+                  autoFocus
+                  captionLayout="dropdown"
+                  startMonth={new Date(2020, 0)}
+                  endMonth={new Date(2030, 11)}
                   classNames={{
                     caption: "flex justify-center pt-1 relative items-center",
-                    caption_label: "hidden", // Hide the default caption label
-                    dropdown_month: "w-full",
-                    dropdown_year: "w-full",
+                    caption_label: "hidden",
                     dropdown: "p-1",
-                    vhidden: "hidden", // Hide any other redundant elements
                   }}
-                  ISOWeek
                   showOutsideDays={false}
-                  view="month"
                   data-testid="month-picker-calendar"
                 />
               </PopoverContent>
@@ -232,7 +226,7 @@ export default function DatePickersPage() {
                     mode="single"
                     selected={dateTime}
                     onSelect={setDateTime}
-                    initialFocus
+                    autoFocus
                     data-testid="date-time-picker-calendar"
                   />
                 </PopoverContent>
@@ -291,7 +285,7 @@ export default function DatePickersPage() {
                   selected={disabledDate}
                   onSelect={setDisabledDate}
                   disabled={disabledDays}
-                  initialFocus
+                  autoFocus
                   data-testid="disabled-dates-picker-calendar"
                 />
               </PopoverContent>
