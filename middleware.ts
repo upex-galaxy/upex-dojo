@@ -1,6 +1,5 @@
+import { auth } from '@/lib/auth';
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { getToken } from 'next-auth/jwt';
 
 // Routes that require authentication
 const protectedRoutes = ['/dashboard'];
@@ -8,16 +7,9 @@ const protectedRoutes = ['/dashboard'];
 // Routes that should redirect to dashboard if authenticated
 const authRoutes = ['/login', '/register'];
 
-export async function middleware(request: NextRequest) {
+export default auth((request) => {
   const { pathname } = request.nextUrl;
-
-  // Get the session token
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
-
-  const isLoggedIn = !!token;
+  const isLoggedIn = !!request.auth;
 
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
@@ -39,7 +31,7 @@ export async function middleware(request: NextRequest) {
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: ['/dashboard/:path*', '/login', '/register'],
