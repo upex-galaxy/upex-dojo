@@ -30,7 +30,7 @@ export default function ToastNotificationsPage() {
       title: "Custom Toast",
       description: "This is a custom toast with an action button.",
       action: (
-        <Button variant="outline" size="sm" onClick={() => console.log("Toast action clicked")}>
+        <Button variant="outline" size="sm" onClick={() => console.log("Toast action clicked")} data-testid="toast-undo-button">
           Undo
         </Button>
       ),
@@ -39,15 +39,15 @@ export default function ToastNotificationsPage() {
 
   return (
     <ComponentLayout>
-      <h1 className="text-3xl font-bold mb-6">Toast Notifications</h1>
-      <div className="space-y-4">
-        <Button onClick={showSuccessToast} className="w-full">
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">Toast Notifications</h1>
+      <div className="space-y-4" data-testid="toasts-container">
+        <Button onClick={showSuccessToast} className="w-full" data-testid="success-toast-button">
           Show Success Toast
         </Button>
-        <Button onClick={showErrorToast} variant="destructive" className="w-full">
+        <Button onClick={showErrorToast} variant="destructive" className="w-full" data-testid="error-toast-button">
           Show Error Toast
         </Button>
-        <Button onClick={showCustomToast} variant="outline" className="w-full">
+        <Button onClick={showCustomToast} variant="outline" className="w-full" data-testid="custom-toast-button">
           Show Custom Toast
         </Button>
       </div>

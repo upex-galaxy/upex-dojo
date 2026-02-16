@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
+import { ComponentLayout } from "@/components/component-layout"
 
 export default function FileUploadsPage() {
   const [file, setFile] = React.useState<File | null>(null)
@@ -38,31 +39,31 @@ export default function FileUploadsPage() {
   }
 
   return (
-    <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-6">File Uploads</h1>
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="file-upload">Choose a file</Label>
-          <Input id="file-upload" type="file" onChange={handleFileChange} />
+    <ComponentLayout>
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">File Uploads</h1>
+      <div className="space-y-4" data-testid="file-upload-container">
+        <div data-testid="file-input-section">
+          <Label htmlFor="file-upload" data-testid="file-input-label">Choose a file</Label>
+          <Input id="file-upload" type="file" onChange={handleFileChange} data-testid="file-input" />
         </div>
         {file && (
-          <div>
-            <p>Selected file: {file.name}</p>
-            <p>File size: {(file.size / 1024).toFixed(2)} KB</p>
+          <div data-testid="file-info">
+            <p data-testid="file-name">Selected file: {file.name}</p>
+            <p data-testid="file-size">File size: {(file.size / 1024).toFixed(2)} KB</p>
           </div>
         )}
-        <Button onClick={simulateUpload} disabled={!file || uploadStatus === "uploading"}>
+        <Button onClick={simulateUpload} disabled={!file || uploadStatus === "uploading"} data-testid="upload-button">
           {uploadStatus === "uploading" ? "Uploading..." : "Upload"}
         </Button>
         {uploadStatus !== "idle" && (
-          <div>
-            <Progress value={uploadProgress} className="w-[60%]" />
-            <p>Upload progress: {uploadProgress}%</p>
-            {uploadStatus === "success" && <p>Upload completed successfully!</p>}
-            {uploadStatus === "error" && <p>An error occurred during upload.</p>}
+          <div data-testid="upload-progress-section">
+            <Progress value={uploadProgress} className="w-[60%]" data-testid="upload-progress-bar" />
+            <p data-testid="upload-progress-value">Upload progress: {uploadProgress}%</p>
+            {uploadStatus === "success" && <p data-testid="upload-success">Upload completed successfully!</p>}
+            {uploadStatus === "error" && <p data-testid="upload-error">An error occurred during upload.</p>}
           </div>
         )}
       </div>
-    </div>
+    </ComponentLayout>
   )
 }

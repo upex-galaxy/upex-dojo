@@ -43,6 +43,12 @@ import {
   Calendar,
   type LucideIcon,
   ImageIcon,
+  LayoutList,
+  BadgeCheck,
+  Navigation,
+  MessageCircle,
+  ScrollText,
+  SeparatorHorizontal,
 } from "lucide-react"
 
 export type Icon = LucideIcon
@@ -93,4 +99,12 @@ export const Icons = {
   upload: Upload,
   download: Download,
   calendar: Calendar,
+  // New component icons
+  alert: AlertCircle,
+  tabs: LayoutList,
+  badge: BadgeCheck,
+  breadcrumb: Navigation,
+  popover: MessageCircle,
+  scrollArea: ScrollText,
+  separator: SeparatorHorizontal,
 }

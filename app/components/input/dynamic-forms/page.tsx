@@ -77,20 +77,20 @@ export default function DynamicFormsPage() {
 
   return (
     <ComponentLayout>
-      <h1 className="text-3xl font-bold mb-6">Dynamic Forms</h1>
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">Dynamic Forms</h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8" data-testid="dynamic-form">
           <FormField
             control={form.control}
             name="username"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
+              <FormItem data-testid="form-field-username">
+                <FormLabel data-testid="username-label">Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="shadcn" {...field} data-testid="username-input" />
                 </FormControl>
                 <FormDescription>This is your public display name.</FormDescription>
-                <FormMessage />
+                <FormMessage data-testid="username-error" />
               </FormItem>
             )}
           />
@@ -98,13 +98,13 @@ export default function DynamicFormsPage() {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
+              <FormItem data-testid="form-field-email">
+                <FormLabel data-testid="email-label">Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="m@example.com" {...field} />
+                  <Input type="email" placeholder="m@example.com" {...field} data-testid="email-input" />
                 </FormControl>
                 <FormDescription>Enter your email address.</FormDescription>
-                <FormMessage />
+                <FormMessage data-testid="email-error" />
               </FormItem>
             )}
           />
@@ -112,34 +112,34 @@ export default function DynamicFormsPage() {
             control={form.control}
             name="bio"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Bio</FormLabel>
+              <FormItem data-testid="form-field-bio">
+                <FormLabel data-testid="bio-label">Bio</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Tell us a little bit about yourself" className="resize-none" {...field} />
+                  <Textarea placeholder="Tell us a little bit about yourself" className="resize-none" {...field} data-testid="bio-textarea" />
                 </FormControl>
                 <FormDescription>
                   You can <span>@mention</span> other users and organizations.
                 </FormDescription>
-                <FormMessage />
+                <FormMessage data-testid="bio-error" />
               </FormItem>
             )}
           />
-          <div>
+          <div data-testid="urls-section">
             {fields.map((field, index) => (
               <FormField
                 control={form.control}
                 key={field.id}
                 name={`urls.${index}.value`}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem data-testid={`form-field-url-${index}`}>
                     <FormLabel className={cn(index !== 0 && "sr-only")}>URLs</FormLabel>
                     <FormDescription className={cn(index !== 0 && "sr-only")}>
                       Add links to your website, blog, or social media profiles.
                     </FormDescription>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} data-testid={`url-input-${index}`} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage data-testid={`url-error-${index}`} />
                   </FormItem>
                 )}
               />
@@ -151,6 +151,7 @@ export default function DynamicFormsPage() {
               className="mt-2"
               onClick={() => append({ value: "" })}
               disabled={fields.length >= 4}
+              data-testid="add-url-button"
             >
               Add URL
             </Button>
@@ -159,12 +160,12 @@ export default function DynamicFormsPage() {
             control={form.control}
             name="applyJob"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4" data-testid="form-field-applyjob">
                 <FormControl>
-                  <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                  <Checkbox checked={field.value} onCheckedChange={field.onChange} data-testid="applyjob-checkbox" />
                 </FormControl>
                 <div className="space-y-1 leading-none">
-                  <FormLabel>Apply for a job</FormLabel>
+                  <FormLabel data-testid="applyjob-label">Apply for a job</FormLabel>
                   <FormDescription>Check this if you want to apply for a job.</FormDescription>
                 </div>
               </FormItem>
@@ -175,33 +176,33 @@ export default function DynamicFormsPage() {
               control={form.control}
               name="employmentStatus"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Employment Status</FormLabel>
+                <FormItem data-testid="form-field-employment">
+                  <FormLabel data-testid="employment-label">Employment Status</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger data-testid="employment-trigger">
                         <SelectValue placeholder="Select your employment status" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="unemployed">Unemployed</SelectItem>
-                      <SelectItem value="employed">Employed</SelectItem>
-                      <SelectItem value="student">Student</SelectItem>
-                      <SelectItem value="retired">Retired</SelectItem>
+                    <SelectContent data-testid="employment-content">
+                      <SelectItem value="unemployed" data-testid="employment-option-unemployed">Unemployed</SelectItem>
+                      <SelectItem value="employed" data-testid="employment-option-employed">Employed</SelectItem>
+                      <SelectItem value="student" data-testid="employment-option-student">Student</SelectItem>
+                      <SelectItem value="retired" data-testid="employment-option-retired">Retired</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>Select your current employment status.</FormDescription>
-                  <FormMessage />
+                  <FormMessage data-testid="employment-error" />
                 </FormItem>
               )}
             />
           )}
-          <Button type="submit">Update profile</Button>
+          <Button type="submit" data-testid="submit-button">Update profile</Button>
         </form>
       </Form>
-      <div className="mt-8">
+      <div className="mt-8" data-testid="form-state-section">
         <h2 className="text-lg font-semibold">Form State:</h2>
-        <pre className="mt-2 w-full max-w-2xl overflow-auto text-sm bg-muted p-4 rounded-md">
+        <pre className="mt-2 w-full max-w-2xl overflow-auto text-sm bg-muted p-4 rounded-md" data-testid="form-state-display">
           {JSON.stringify(form.watch(), null, 2)}
         </pre>
       </div>

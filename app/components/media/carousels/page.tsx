@@ -14,7 +14,7 @@ export default function CarouselsPage() {
   const slides = React.useMemo(
     () =>
       Array.from({ length: totalSlides }).map((_, index) => (
-        <Card key={index} className="w-full h-40 flex-shrink-0">
+        <Card key={index} className="w-full h-40 flex-shrink-0" data-testid={`carousel-slide-${index + 1}`}>
           <CardContent className="flex items-center justify-center h-full">
             <span className="text-4xl font-semibold">{index + 1}</span>
           </CardContent>
@@ -53,12 +53,13 @@ export default function CarouselsPage() {
 
   return (
     <ComponentLayout>
-      <h1 className="text-3xl font-bold mb-6">Carousels</h1>
-      <div className="space-y-4">
-        <div className="relative overflow-hidden w-full">
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">Carousels</h1>
+      <div className="space-y-4" data-testid="carousel-container">
+        <div className="relative overflow-hidden w-full" data-testid="carousel-viewport">
           <div
             className="flex transition-transform duration-300 ease-in-out"
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            data-testid="carousel-track"
           >
             {slides}
           </div>
@@ -67,6 +68,7 @@ export default function CarouselsPage() {
             size="icon"
             className="absolute top-1/2 left-2 transform -translate-y-1/2"
             onClick={handlePrevious}
+            data-testid="carousel-previous-button"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -75,18 +77,19 @@ export default function CarouselsPage() {
             size="icon"
             className="absolute top-1/2 right-2 transform -translate-y-1/2"
             onClick={handleNext}
+            data-testid="carousel-next-button"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
-        <div className="flex justify-center space-x-2">
-          <Button onClick={toggleAutoPlay}>{autoPlay ? "Pause" : "Auto-play"}</Button>
+        <div className="flex justify-center space-x-2" data-testid="carousel-controls">
+          <Button onClick={toggleAutoPlay} data-testid="carousel-autoplay-button">{autoPlay ? "Pause" : "Auto-play"}</Button>
         </div>
-        <div>
+        <div data-testid="carousel-state">
           <h2 className="text-lg font-semibold">Carousel State:</h2>
-          <p>Current Slide: {currentSlide + 1}</p>
-          <p>Total Slides: {totalSlides}</p>
-          <p>Auto-play: {autoPlay ? "On" : "Off"}</p>
+          <p data-testid="current-slide">Current Slide: {currentSlide + 1}</p>
+          <p data-testid="total-slides">Total Slides: {totalSlides}</p>
+          <p data-testid="autoplay-status">Auto-play: {autoPlay ? "On" : "Off"}</p>
         </div>
       </div>
     </ComponentLayout>

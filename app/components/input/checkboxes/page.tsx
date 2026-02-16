@@ -18,27 +18,28 @@ export default function CheckboxesPage() {
 
   return (
     <ComponentLayout>
-      <h1 className="text-3xl font-bold mb-6">Checkboxes</h1>
-      <div className="space-y-4">
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">Checkboxes</h1>
+      <div className="space-y-4" data-testid="checkboxes-container">
         {Object.entries(checked).map(([id, isChecked]) => (
-          <div key={id} className="flex items-center space-x-2">
-            <Checkbox id={id} checked={isChecked} onCheckedChange={() => handleCheckboxChange(id)} />
+          <div key={id} className="flex items-center space-x-2" data-testid={`checkbox-row-${id}`}>
+            <Checkbox id={id} checked={isChecked} onCheckedChange={() => handleCheckboxChange(id)} data-testid={`checkbox-${id}`} />
             <Label
               htmlFor={id}
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              data-testid={`checkbox-label-${id}`}
             >
               {`Option ${id.slice(-1)}`}
             </Label>
           </div>
         ))}
       </div>
-      <div className="mt-4">
+      <div className="mt-4" data-testid="checkboxes-state">
         <h2 className="text-lg font-semibold mb-2">Selected Options:</h2>
-        <ul>
+        <ul data-testid="selected-options-list">
           {Object.entries(checked)
             .filter(([, isChecked]) => isChecked)
             .map(([id]) => (
-              <li key={id}>{`Option ${id.slice(-1)}`}</li>
+              <li key={id} data-testid={`selected-option-${id}`}>{`Option ${id.slice(-1)}`}</li>
             ))}
         </ul>
       </div>

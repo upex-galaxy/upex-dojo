@@ -4,6 +4,7 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Download } from "lucide-react"
+import { ComponentLayout } from "@/components/component-layout"
 
 interface FileInfo {
   name: string
@@ -57,31 +58,31 @@ export default function FileDownloadsPage() {
   }
 
   return (
-    <div className="container max-w-4xl mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-6">File Downloads</h1>
-      <div className="space-y-4">
-        <div className="p-6 border rounded-lg bg-card">
+    <ComponentLayout>
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">File Downloads</h1>
+      <div className="space-y-4" data-testid="downloads-container">
+        <div className="p-6 border rounded-lg bg-card" data-testid="file-card">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
             <div className="space-y-1">
-              <h3 className="font-semibold">{file.name}</h3>
-              <p className="text-sm text-muted-foreground">{file.size}</p>
+              <h3 className="font-semibold" data-testid="file-name">{file.name}</h3>
+              <p className="text-sm text-muted-foreground" data-testid="file-size">{file.size}</p>
             </div>
-            <Button onClick={handleDownload} disabled={downloadStatus === "downloading"} className="mt-2 sm:mt-0">
+            <Button onClick={handleDownload} disabled={downloadStatus === "downloading"} className="mt-2 sm:mt-0" data-testid="download-button">
               <Download className="mr-2 h-4 w-4" />
               {downloadStatus === "downloading" ? "Downloading..." : "Download"}
             </Button>
           </div>
           {downloadStatus !== "idle" && (
-            <div className="space-y-2">
-              <Progress value={downloadProgress} className="w-full" />
+            <div className="space-y-2" data-testid="download-progress-section">
+              <Progress value={downloadProgress} className="w-full" data-testid="download-progress-bar" />
               <div className="flex justify-between text-sm text-muted-foreground">
-                <span>{downloadProgress}%</span>
-                {downloadStatus === "completed" && <span className="text-green-500">Download completed</span>}
+                <span data-testid="download-progress-value">{downloadProgress}%</span>
+                {downloadStatus === "completed" && <span className="text-green-500" data-testid="download-completed">Download completed</span>}
               </div>
             </div>
           )}
         </div>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }

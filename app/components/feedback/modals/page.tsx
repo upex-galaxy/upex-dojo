@@ -33,20 +33,20 @@ export default function ModalsPage() {
 
   return (
     <ComponentLayout>
-      <h1 className="text-3xl font-bold mb-6">Modals</h1>
-      <div className="space-y-4">
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">Modals</h1>
+      <div className="space-y-4" data-testid="modals-container">
         <Dialog open={isOpen} onOpenChange={handleOpenChange}>
           <DialogTrigger asChild>
-            <Button variant="outline">Open Modal</Button>
+            <Button variant="outline" data-testid="open-modal-button">Open Modal</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px]" data-testid="modal-content">
             <DialogHeader>
-              <DialogTitle>Edit profile</DialogTitle>
-              <DialogDescription>Make changes to your profile here. Click save when you're done.</DialogDescription>
+              <DialogTitle data-testid="modal-title">Edit profile</DialogTitle>
+              <DialogDescription data-testid="modal-description">Make changes to your profile here. Click save when you're done.</DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
+            <div className="grid gap-4 py-4" data-testid="modal-form">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
+                <Label htmlFor="name" className="text-right" data-testid="name-label">
                   Name
                 </Label>
                 <Input
@@ -54,19 +54,20 @@ export default function ModalsPage() {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   className="col-span-3"
+                  data-testid="name-input"
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit" onClick={handleSubmit}>
+              <Button type="submit" onClick={handleSubmit} data-testid="save-button">
                 Save changes
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        <div>
-          <p>Modal is {isOpen ? "open" : "closed"}</p>
-          {inputValue && <p>Last submitted value: {inputValue}</p>}
+        <div data-testid="modal-state">
+          <p data-testid="modal-status">Modal is {isOpen ? "open" : "closed"}</p>
+          {inputValue && <p data-testid="last-submitted-value">Last submitted value: {inputValue}</p>}
         </div>
       </div>
     </ComponentLayout>

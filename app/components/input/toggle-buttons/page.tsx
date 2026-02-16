@@ -14,36 +14,36 @@ export default function ToggleButtonsPage() {
 
   return (
     <ComponentLayout>
-      <h1 className="text-3xl font-bold mb-6">Toggle Buttons</h1>
-      <div className="space-y-8">
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold">Switch</h2>
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">Toggle Buttons</h1>
+      <div className="space-y-8" data-testid="toggles-container">
+        <div className="space-y-2" data-testid="switch-section">
+          <h2 className="text-xl font-semibold" data-testid="switch-title">Switch</h2>
           <div className="flex items-center space-x-2">
-            <Switch id="airplane-mode" checked={switchState} onCheckedChange={setSwitchState} />
-            <Label htmlFor="airplane-mode">Airplane Mode</Label>
+            <Switch id="airplane-mode" checked={switchState} onCheckedChange={setSwitchState} data-testid="switch-toggle" />
+            <Label htmlFor="airplane-mode" data-testid="switch-label">Airplane Mode</Label>
           </div>
-          <p>Switch state: {switchState ? "On" : "Off"}</p>
+          <p data-testid="switch-state">Switch state: {switchState ? "On" : "Off"}</p>
         </div>
 
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold">Toggle Group</h2>
-          <ToggleGroup type="multiple" value={toggleGroup} onValueChange={setToggleGroup}>
-            <ToggleGroupItem value="bold" aria-label="Toggle bold">
+        <div className="space-y-2" data-testid="toggle-group-section">
+          <h2 className="text-xl font-semibold" data-testid="toggle-group-title">Toggle Group</h2>
+          <ToggleGroup type="multiple" value={toggleGroup} onValueChange={setToggleGroup} data-testid="toggle-group">
+            <ToggleGroupItem value="bold" aria-label="Toggle bold" data-testid="toggle-bold">
               <Bold className="h-4 w-4" />
             </ToggleGroupItem>
-            <ToggleGroupItem value="italic" aria-label="Toggle italic">
+            <ToggleGroupItem value="italic" aria-label="Toggle italic" data-testid="toggle-italic">
               <Italic className="h-4 w-4" />
             </ToggleGroupItem>
-            <ToggleGroupItem value="underline" aria-label="Toggle underline">
+            <ToggleGroupItem value="underline" aria-label="Toggle underline" data-testid="toggle-underline">
               <Underline className="h-4 w-4" />
             </ToggleGroupItem>
           </ToggleGroup>
-          <p>Toggle Group state: {toggleGroup.join(", ") || "None"}</p>
+          <p data-testid="toggle-group-state">Toggle Group state: {toggleGroup.join(", ") || "None"}</p>
         </div>
 
-        <div className="space-y-2">
-          <h2 className="text-xl font-semibold">Toggle Button</h2>
-          <Button variant="outline" onClick={() => setSwitchState(!switchState)}>
+        <div className="space-y-2" data-testid="toggle-button-section">
+          <h2 className="text-xl font-semibold" data-testid="toggle-button-title">Toggle Button</h2>
+          <Button variant="outline" onClick={() => setSwitchState(!switchState)} data-testid="toggle-button">
             {switchState ? "Turn Off" : "Turn On"}
           </Button>
         </div>

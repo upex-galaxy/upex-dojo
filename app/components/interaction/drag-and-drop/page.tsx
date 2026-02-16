@@ -19,6 +19,7 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { Button } from "@/components/ui/button"
+import { ComponentLayout } from "@/components/component-layout"
 
 const SortableItem = ({ id }: { id: string }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id })
@@ -35,6 +36,7 @@ const SortableItem = ({ id }: { id: string }) => {
       {...attributes}
       {...listeners}
       className="p-4 mb-2 bg-secondary rounded-md cursor-move"
+      data-testid={`sortable-item-${id.toLowerCase().replace(/\s+/g, "-")}`}
     >
       {id}
     </div>
@@ -46,7 +48,7 @@ const Container = ({ id, items }: { id: string; items: string[] }) => {
 
   return (
     <SortableContext id={id} items={items} strategy={verticalListSortingStrategy}>
-      <div ref={setNodeRef} className="p-4 bg-muted rounded-md min-h-[200px]">
+      <div ref={setNodeRef} className="p-4 bg-muted rounded-md min-h-[200px]" data-testid={`dnd-container-${id}`}>
         {items.map((id) => (
           <SortableItem key={id} id={id} />
         ))}
@@ -56,7 +58,7 @@ const Container = ({ id, items }: { id: string; items: string[] }) => {
 }
 
 const DraggableItem = ({ id }: { id: string }) => {
-  return <div className="p-2 mb-2 bg-primary text-primary-foreground rounded-md cursor-move">{id}</div>
+  return <div className="p-2 mb-2 bg-primary text-primary-foreground rounded-md cursor-move" data-testid={`draggable-item-${id.toLowerCase().replace(/\s+/g, "-")}`}>{id}</div>
 }
 
 export default function DragAndDropPage() {
@@ -142,10 +144,10 @@ export default function DragAndDropPage() {
   }
 
   return (
-    <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-6">Drag and Drop</h1>
+    <ComponentLayout>
+      <h1 className="text-3xl font-bold mb-6" data-testid="page-title">Drag and Drop</h1>
 
-      <h2 className="text-2xl font-semibold mb-4">Sortable List</h2>
+      <h2 className="text-2xl font-semibold mb-4" data-testid="sortable-list-title">Sortable List</h2>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -153,7 +155,7 @@ export default function DragAndDropPage() {
         onDragStart={handleDragStart}
       >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          <div className="space-y-2">
+          <div className="space-y-2" data-testid="sortable-list">
             {items.map((id) => (
               <SortableItem key={id} id={id} />
             ))}
@@ -162,30 +164,30 @@ export default function DragAndDropPage() {
         <DragOverlay>{activeId ? <DraggableItem id={activeId} /> : null}</DragOverlay>
       </DndContext>
 
-      <h2 className="text-2xl font-semibold mt-8 mb-4">Drag Between Containers</h2>
+      <h2 className="text-2xl font-semibold mt-8 mb-4" data-testid="containers-title">Drag Between Containers</h2>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEndContainers}
         onDragStart={handleDragStart}
       >
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4" data-testid="containers-grid">
           <Container id="container1" items={containers.container1} />
           <Container id="container2" items={containers.container2} />
         </div>
         <DragOverlay>{activeId ? <DraggableItem id={activeId} /> : null}</DragOverlay>
       </DndContext>
 
-      <Button onClick={resetContainers} className="mt-4">
+      <Button onClick={resetContainers} className="mt-4" data-testid="reset-containers-button">
         Reset Containers
       </Button>
 
-      <div className="mt-8">
+      <div className="mt-8" data-testid="dnd-state">
         <h2 className="text-lg font-semibold">Current State:</h2>
-        <pre className="mt-2 p-4 bg-muted rounded-md overflow-auto">
+        <pre className="mt-2 p-4 bg-muted rounded-md overflow-auto" data-testid="state-display">
           {JSON.stringify({ sortableList: items, containers }, null, 2)}
         </pre>
       </div>
-    </div>
+    </ComponentLayout>
   )
 }
