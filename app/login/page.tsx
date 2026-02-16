@@ -43,6 +43,17 @@ function LoginForm() {
       if (result?.error) {
         setError("Invalid email or password");
       } else {
+        // Fetch JWT token for API usage (enables E2E test interception via page.waitForResponse())
+        try {
+          await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+        } catch {
+          // Silent catch - login UI continues even if token fetch fails
+        }
+
         router.push(callbackUrl);
         router.refresh();
       }

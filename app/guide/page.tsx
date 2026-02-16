@@ -21,6 +21,7 @@ import {
   CheckCircle2,
   Copy,
   BookOpen,
+  TestTube2,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -389,7 +390,161 @@ curl http://localhost:3000/api/tasks \\
           </AccordionContent>
         </AccordionItem>
 
-        {/* Section 4: Quick Reference */}
+        {/* Section 4: E2E Testing with Playwright */}
+        <AccordionItem value="e2e" className="border rounded-lg px-4">
+          <AccordionTrigger className="text-lg font-semibold" data-testid="accordion-e2e">
+            <span className="flex items-center gap-2">
+              <TestTube2 className="h-5 w-5 text-pink-500" />
+              E2E Testing (Playwright)
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className="space-y-6 pb-4">
+            {/* Overview */}
+            <div>
+              <h4 className="font-semibold mb-2">Interceptar JWT durante Login UI</h4>
+              <p className="text-sm text-muted-foreground">
+                Cuando un usuario hace login desde la UI, el sistema hace una llamada a{" "}
+                <code className="bg-muted px-1 rounded">/api/auth/login</code> que retorna el JWT token.
+                Puedes interceptar esta respuesta con Playwright para obtener el token y usarlo en llamadas API.
+              </p>
+            </div>
+
+            {/* Step 1 */}
+            <div>
+              <h4 className="font-semibold mb-2">1. Interceptar el token durante login</h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                Usa <code className="bg-muted px-1 rounded">page.waitForResponse()</code> para capturar la respuesta:
+              </p>
+              <CodeBlock
+                language="typescript"
+                code={`import { test, expect } from '@playwright/test';
+
+test('login and get JWT token', async ({ page }) => {
+  await page.goto('/login');
+
+  // Fill login form
+  await page.fill('[data-testid="login-email-input"]', 'testuser@upex.dev');
+  await page.fill('[data-testid="login-password-input"]', 'Test123!');
+
+  // Wait for the /api/auth/login response while clicking submit
+  const [response] = await Promise.all([
+    page.waitForResponse(resp =>
+      resp.url().includes('/api/auth/login') && resp.status() === 200
+    ),
+    page.click('[data-testid="login-submit-button"]'),
+  ]);
+
+  // Extract the JWT token
+  const { access_token } = await response.json();
+  console.log('JWT Token:', access_token);
+
+  // Store for later use in API calls
+  expect(access_token).toBeTruthy();
+});`}
+              />
+            </div>
+
+            {/* Step 2 */}
+            <div>
+              <h4 className="font-semibold mb-2">2. Usar el token para llamadas API</h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                Una vez que tienes el token, úsalo con <code className="bg-muted px-1 rounded">request.newContext()</code>:
+              </p>
+              <CodeBlock
+                language="typescript"
+                code={`test('use token for API calls', async ({ page, request }) => {
+  // ... login and get access_token (step 1)
+
+  // Create API context with auth header
+  const apiContext = await request.newContext({
+    baseURL: 'http://localhost:3000',
+    extraHTTPHeaders: {
+      'Authorization': \`Bearer \${access_token}\`,
+    },
+  });
+
+  // Now make authenticated API calls
+  const tasksResponse = await apiContext.get('/api/tasks');
+  expect(tasksResponse.ok()).toBeTruthy();
+
+  const tasks = await tasksResponse.json();
+  console.log('User tasks:', tasks);
+});`}
+              />
+            </div>
+
+            {/* Step 3 */}
+            <div>
+              <h4 className="font-semibold mb-2">3. Fixture reutilizable (recomendado)</h4>
+              <p className="text-sm text-muted-foreground mb-3">
+                Crea un fixture para reutilizar la autenticación en múltiples tests:
+              </p>
+              <CodeBlock
+                language="typescript"
+                code={`// fixtures/auth.ts
+import { test as base, APIRequestContext } from '@playwright/test';
+
+type AuthFixtures = {
+  authToken: string;
+  authApi: APIRequestContext;
+};
+
+export const test = base.extend<AuthFixtures>({
+  authToken: async ({ page }, use) => {
+    await page.goto('/login');
+    await page.fill('[data-testid="login-email-input"]', 'testuser@upex.dev');
+    await page.fill('[data-testid="login-password-input"]', 'Test123!');
+
+    const [response] = await Promise.all([
+      page.waitForResponse(r => r.url().includes('/api/auth/login')),
+      page.click('[data-testid="login-submit-button"]'),
+    ]);
+
+    const { access_token } = await response.json();
+    await use(access_token);
+  },
+
+  authApi: async ({ authToken, request }, use) => {
+    const ctx = await request.newContext({
+      extraHTTPHeaders: { 'Authorization': \`Bearer \${authToken}\` },
+    });
+    await use(ctx);
+    await ctx.dispose();
+  },
+});
+
+// In your tests:
+// import { test } from './fixtures/auth';
+// test('my test', async ({ authApi }) => { ... });`}
+              />
+            </div>
+
+            {/* data-testid reference */}
+            <div>
+              <h4 className="font-semibold mb-2">Selectores data-testid disponibles</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-2 bg-muted/50 p-2 rounded">
+                  <code>login-email-input</code>
+                  <span className="text-muted-foreground">- Campo de email</span>
+                </div>
+                <div className="flex items-center gap-2 bg-muted/50 p-2 rounded">
+                  <code>login-password-input</code>
+                  <span className="text-muted-foreground">- Campo de password</span>
+                </div>
+                <div className="flex items-center gap-2 bg-muted/50 p-2 rounded">
+                  <code>login-submit-button</code>
+                  <span className="text-muted-foreground">- Botón de submit</span>
+                </div>
+                <div className="flex items-center gap-2 bg-muted/50 p-2 rounded">
+                  <code>login-error</code>
+                  <span className="text-muted-foreground">- Alerta de error</span>
+                </div>
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Section 5: Quick Reference */}
         <AccordionItem value="reference" className="border rounded-lg px-4">
           <AccordionTrigger className="text-lg font-semibold" data-testid="accordion-reference">
             <span className="flex items-center gap-2">

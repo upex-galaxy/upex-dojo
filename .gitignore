@@ -29,3 +29,5 @@ next-env.d.ts
 
 # playwright-cli local artifacts
 .playwright-cli/
+
+.claude

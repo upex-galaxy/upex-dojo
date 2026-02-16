@@ -12,6 +12,28 @@ UPEX DOJO is a QA automation practice platform with:
 
 Staging (Practice): `dojo.upexgalaxy.com` | Docs: `/api/docs`
 
+## Deployment & Branching Strategy
+
+**IMPORTANTE:** Este es un proyecto de práctica/demo para testing automatizado.
+
+| Aspecto | Detalle |
+|---------|---------|
+| **Rama principal** | `staging` (rama por defecto) |
+| **Rama main** | NO USAR - read-only, abandonada |
+| **Deploy** | Vercel, linked a rama `staging` |
+| **URL producción** | `https://dojo.upexgalaxy.com` |
+| **Auto-deploy** | Sí, cada push a `staging` despliega automáticamente |
+
+**Flujo de trabajo:**
+- Siempre trabajar en `staging`
+- Push directo a `staging` → deploy automático a Vercel
+- NO usar PRs a `main` (rama obsoleta)
+
+**Propósito del proyecto:**
+- Demo de práctica para QA automation
+- Target para tests de UI (Playwright), API y Database
+- Usado por repositorios externos de automatización de pruebas
+
 ## Commands
 
 ```bash
