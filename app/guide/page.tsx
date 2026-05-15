@@ -147,17 +147,17 @@ export default function GuidePage() {
             data-testid="credentials-jira-button"
           >
             <Link
-              href="https://upexgalaxy67.atlassian.net/browse/OB-111"
+              href="https://jira.upexgalaxy.com/browse/OB-111"
               target="_blank"
               rel="noopener noreferrer"
             >
               <Key className="h-5 w-5 mr-2" />
-              Ver credenciales en Jira (OB-111)
+              Ver credenciales en Jira
               <ExternalLink className="h-4 w-4 ml-2" />
             </Link>
           </Button>
           <p className="mt-3 text-xs text-muted-foreground">
-            Si no tenés acceso al ticket OB-111, solicitalo a tu instructor o al canal de
+            Si no tenés acceso al ticket en Jira, solicitalo a tu instructor o al canal de
             onboarding de UPEX.
           </p>
         </CardContent>
@@ -281,13 +281,13 @@ export default function GuidePage() {
                 <code>tasks</code>. El host real, el password y el connection string completo
                 están en{" "}
                 <Link
-                  href="https://upexgalaxy67.atlassian.net/browse/OB-111"
+                  href="https://jira.upexgalaxy.com/browse/OB-111"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold underline"
                   data-testid="db-credentials-link"
                 >
-                  Jira OB-111
+                  Jira
                 </Link>
                 .
               </p>
@@ -299,18 +299,18 @@ export default function GuidePage() {
               <p className="text-sm text-muted-foreground mb-3">
                 Crea un archivo <code className="bg-muted px-1 rounded">dbhub.toml</code> en tu
                 proyecto (reemplazá los valores marcados con{" "}
-                <code className="bg-muted px-1 rounded">&lt;ver OB-111&gt;</code> con los reales):
+                <code className="bg-muted px-1 rounded">&lt;ver Jira&gt;</code> con los reales):
               </p>
               <CodeBlock
                 language="toml"
                 code={`[[sources]]
 id = "upex-dojo"
 type = "postgresql"
-host = "<ver OB-111>"
+host = "<ver Jira>"
 port = 5432
 database = "neondb"
 user = "qa_student"
-password = "<ver OB-111>"
+password = "<ver Jira>"
 sslmode = "require"`}
               />
             </div>
@@ -379,13 +379,13 @@ sslmode = "require"`}
                 Las URLs de endpoints (staging y local), los bodies de login y los demo users
                 están listados en{" "}
                 <Link
-                  href="https://upexgalaxy67.atlassian.net/browse/OB-111"
+                  href="https://jira.upexgalaxy.com/browse/OB-111"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold underline"
                   data-testid="api-credentials-link"
                 >
-                  Jira OB-111
+                  Jira
                 </Link>
                 , cada uno en su propio snippet con botón de copia.
               </p>
