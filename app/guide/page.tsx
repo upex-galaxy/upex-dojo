@@ -123,6 +123,46 @@ export default function GuidePage() {
         </p>
       </div>
 
+      {/* Credentials CTA — high-visibility banner */}
+      <Card
+        className="mb-8 border-2 border-amber-500/70 bg-amber-50 dark:bg-amber-950/30"
+        data-testid="credentials-cta-card"
+      >
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Key className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            ¿Necesitás las credenciales para hacer testing?
+          </CardTitle>
+          <CardDescription>
+            Las credenciales reales (Base de Datos, API, UI) viven en una épica de Jira con
+            acceso restringido a QA. Cada credencial está en su propio snippet con botón de
+            copia.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button
+            asChild
+            size="lg"
+            className="w-full md:w-auto bg-amber-600 hover:bg-amber-700 text-white"
+            data-testid="credentials-jira-button"
+          >
+            <Link
+              href="https://upexgalaxy67.atlassian.net/browse/OB-111"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Key className="h-5 w-5 mr-2" />
+              Ver credenciales en Jira (OB-111)
+              <ExternalLink className="h-4 w-4 ml-2" />
+            </Link>
+          </Button>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Si no tenés acceso al ticket OB-111, solicitalo a tu instructor o al canal de
+            onboarding de UPEX.
+          </p>
+        </CardContent>
+      </Card>
+
       {/* Architecture Diagram Card */}
       <Card className="mb-8" data-testid="architecture-card">
         <CardHeader>
@@ -229,22 +269,48 @@ export default function GuidePage() {
               </ul>
             </div>
 
+            {/* Credentials callout */}
+            <div className="rounded-lg border-l-4 border-amber-500 bg-amber-50 dark:bg-amber-950/30 p-4 text-sm">
+              <p className="font-semibold flex items-center gap-2">
+                <Key className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                Dónde obtener las credenciales reales
+              </p>
+              <p className="mt-1 text-muted-foreground">
+                El usuario <code className="bg-muted px-1 rounded">qa_student</code> es{" "}
+                <strong>read-only</strong> sobre las tablas <code>users</code> y{" "}
+                <code>tasks</code>. El host real, el password y el connection string completo
+                están en{" "}
+                <Link
+                  href="https://upexgalaxy67.atlassian.net/browse/OB-111"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold underline"
+                  data-testid="db-credentials-link"
+                >
+                  Jira OB-111
+                </Link>
+                .
+              </p>
+            </div>
+
             {/* Step 1 */}
             <div>
               <h4 className="font-semibold mb-2">1. Crear archivo de configuración</h4>
               <p className="text-sm text-muted-foreground mb-3">
-                Crea un archivo <code className="bg-muted px-1 rounded">dbhub.toml</code> en tu proyecto:
+                Crea un archivo <code className="bg-muted px-1 rounded">dbhub.toml</code> en tu
+                proyecto (reemplazá los valores marcados con{" "}
+                <code className="bg-muted px-1 rounded">&lt;ver OB-111&gt;</code> con los reales):
               </p>
               <CodeBlock
                 language="toml"
                 code={`[[sources]]
 id = "upex-dojo"
 type = "postgresql"
-host = "ep-xxx-yyy.us-east-2.aws.neon.tech"
+host = "<ver OB-111>"
 port = 5432
 database = "neondb"
 user = "qa_student"
-password = "your-password"
+password = "<ver OB-111>"
 sslmode = "require"`}
               />
             </div>
@@ -303,6 +369,28 @@ sslmode = "require"`}
             </span>
           </AccordionTrigger>
           <AccordionContent className="space-y-6 pb-4">
+            {/* Credentials callout */}
+            <div className="rounded-lg border-l-4 border-amber-500 bg-amber-50 dark:bg-amber-950/30 p-4 text-sm">
+              <p className="font-semibold flex items-center gap-2">
+                <Key className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                Credenciales centralizadas
+              </p>
+              <p className="mt-1 text-muted-foreground">
+                Las URLs de endpoints (staging y local), los bodies de login y los demo users
+                están listados en{" "}
+                <Link
+                  href="https://upexgalaxy67.atlassian.net/browse/OB-111"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold underline"
+                  data-testid="api-credentials-link"
+                >
+                  Jira OB-111
+                </Link>
+                , cada uno en su propio snippet con botón de copia.
+              </p>
+            </div>
+
             {/* How it works */}
             <div>
               <h4 className="font-semibold mb-2">Cómo funciona</h4>
